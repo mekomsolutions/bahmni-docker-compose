@@ -1,0 +1,92 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>net.mekomsolutions</groupId>
+  <artifactId>bahmni-docker-compose</artifactId>
+  <name>Bahmni Docker Compose</name>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <developers>
+    <developer>
+      <name>Mekom Solutions</name>
+    </developer>
+  </developers>
+  <organization>
+    <name>Mekom Solutions</name>
+    <url>http://www.mekomsolutions.com</url>
+  </organization>
+
+  <properties>
+
+    <distro.baseDir>${project.build.directory}/${project.artifactId}-${project.version}</distro.baseDir>
+
+  </properties>
+
+  <dependencies>
+  </dependencies>
+
+  <build>
+    <plugins>
+
+      <!-- packaging the distro as a installable/deployable file -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>package-distro-artifact</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <appendAssemblyId>false</appendAssemblyId>
+              <descriptors>
+                <descriptor>assembly.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.2.0</version>
+        <configuration>
+          <outputDirectory>${project.build.directory}/${project.artifactId}-${project.version}</outputDirectory>
+          <resources>
+            <resource>
+              <directory>${project.basedir}</directory>
+              <excludes>
+                <exclude>.gitignore</exclude>
+                <exclude>*override*</exclude>
+                <exclude>pom.xml</exclude>
+                <exclude>assembly.xml</exclude>
+              </excludes>
+            </resource>
+          </resources>
+        </configuration>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <repositories>
+    <repository>
+      <id>mks-nexus-public</id>
+      <url>https://nexus.mekomsolutions.net/repository/maven-public/</url>
+      <snapshots>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+    </repository>
+  </repositories>
+
+</project>
