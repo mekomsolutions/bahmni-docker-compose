@@ -1,4 +1,4 @@
-# Bahmni Docker
+# Bahmni Docker Compose
 
 Docker Compose project to run Bahmni.
 
@@ -224,28 +224,7 @@ This will be added to the openmrs-runtime.properties file.
 
 ### All environment variables
 
-
-`OPENMRS_CONFIG_PATH`: Path to a custom OpenMRS Configuration. See [OpenMRS Initializer](https://github.com/mekomsolutions/openmrs-module-initializer/) for more information.
-
-`BAHMNI_CONFIG_PATH`: Path to a custom Bahmni Config folder.
-
-`OPENMRS_MODULES_PATH`: Path to custom set of OpenMRS modules.
-
-`BAHMNI_APPS_PATH`: Path to Bahmni Apps sources.
-
-`BAHMNI_HOME_PATH`: Path to Bahmni Home. Bahmni Home is mostly used to
-
-`TIMEZONE`**\***: Server timezone. See https://en.wikipedia.org/wiki/List_of_tz_database_time_zones for a complete list of possible Timezones.
-
-`BAHMNI_MART_CRON_TIME`**\***: Provide a custom cron time (in Crontab format) for the Bahmni Mart flattening. Default is `30 21 * * *` - i.e. 10:30 PM every day.
-
-`ODOO_EXTRA_ADDONS`: Path to Odoo additional addons.
-
-`ODOO_CONFIG_PATH`: Path to a custom Odoo Configuration. See [Odoo Initializer](https://github.com/mekomsolutions/
-odoo-initializer/) for more informations.
-
-**\*** Note: Variables with a **\*** require the containers to be rebuilt. Use `docker-compose build`
-
+The complete list of available variables can be found in [.env](.env).
 
 ## Known limitations
 
