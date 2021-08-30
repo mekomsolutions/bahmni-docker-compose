@@ -16,7 +16,7 @@ Docker Compose project to run Bahmni.
 export VERSION=1.0.0-SNAPSHOT
 mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -Dtransitive=false
 mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:copy -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -DoutputDirectory=.
-unzip bahmni-docker-compose-$VERSION.zip -d docker-commpose
+unzip bahmni-docker-compose-$VERSION.zip -d docker-compose
 ```
 
 ### Download the Bahmni distribution of your choice:
