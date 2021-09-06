@@ -120,11 +120,6 @@ services:
       OPENELIS_HOST: openelis
       OPENELIS_ATOMFEED_USER: ${OPENELIS_ATOMFEED_USER}
       OPENELIS_ATOMFEED_PASSWORD: ${OPENELIS_ATOMFEED_PASSWORD}
-      ODOO_USER: ${ODOO_USER}
-      ODOO_PASSWORD: ${ODOO_PASSWORD}
-      ODOO_DB: odoo
-      ODOO_HOST: odoo
-      ODOO_PORT: 8069
       MODULE_WEB_ADMIN: "true"
       DB_AUTO_UPDATE: "true"
       DB_CREATE_TABLES: "true"
@@ -184,9 +179,6 @@ services:
       OPENMRS_DB_USERNAME: ${OPENMRS_DB_USER}
       MYSQL_PASSWORD: ${OPENMRS_DB_PASSWORD}
       # Odoo DB connection details
-      ERP_DB_HOSTNAME: postgresql
-      ERP_DB_USERNAME: ${ODOO_DB_USER}
-      ERP_DB_PASSWORD: ${ODOO_DB_PASSWORD}
       # Additional MySQL root creds (?)
       MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
@@ -229,11 +221,6 @@ services:
       OPENMRS_DB_NAME: openmrs
       OPENMRS_DB_USER: ${OPENMRS_DB_USER}
       OPENMRS_DB_PASSWORD: ${OPENMRS_DB_PASSWORD}
-      # Odoo DB connection details
-      ERP_DB_HOSTNAME: postgresql
-      ERP_DB_NAME: odoo
-      ERP_DB_USERNAME: ${ODOO_DB_USER}
-      ERP_DB_PASSWORD: ${ODOO_DB_PASSWORD}
       # Anayltics DB connection details. This is the actual Bahmni Mart database.
       ANALYTICS_DB_HOST: postgresql
       ANALYTICS_DB_NAME: analytics
@@ -290,108 +277,14 @@ services:
       ANALYTICS_DB_NAME: analytics
       ANALYTICS_DB_USER: ${ANALYTICS_DB_USER}
       ANALYTICS_DB_PASSWORD: ${ANALYTICS_DB_PASSWORD}
-      # Odoo DB vars
-      ODOO_DB_NAME: odoo
-      ODOO_DB_USER: ${ODOO_DB_USER}
-      ODOO_DB_PASSWORD: ${ODOO_DB_PASSWORD}
-      # OpenELIS DB Vars
-      OPENELIS_DB_USER: ${OPENELIS_DB_USER}
-      OPENELIS_DB_PASSWORD: ${OPENELIS_DB_PASSWORD}
-      OPENELIS_DB_NAME: ${OPENELIS_DB_NAME}
     networks:
       bahmni:
         aliases:
-          - odoo-postgresql
           - bahmni-mart-postgresql
           - bahmni-mart-db
     volumes:
       - ${POSTGRES_DATADIR:-postgresql-data}:/var/lib/postgresql/data
       - "${SQL_SCRIPTS_PATH:-./sqls}/postgresql:/docker-entrypoint-initdb.d"
-
-  # Odoo: The ERP component of Bahmni
-  odoo:
-    depends_on:
-      - postgresql
-    image: mekomsolutions/odoo:bahmni_latest
-    environment:
-      HOST: postgresql
-      PORT: 5432
-      USER: ${ODOO_DB_USER}
-      PASSWORD: ${ODOO_DB_PASSWORD}
-      DB_NAME: odoo
-      MASTER_PASSWORD: ${ODOO_MASTER_PASSWORD}
-      INITIALIZER_DATA_FILES_PATH: ${ODOO_INITIALIZER_DATA_FILES_PATH}
-      INITIALIZER_CONFIG_FILE_PATH: ${ODOO_INITIALIZER_CONFIG_FILE_PATH}
-    networks:
-      bahmni:
-        aliases:
-          - odoo-10
-    volumes:
-      - "${ODOO_EXTRA_ADDONS:-odoo-extra-addons}:/mnt/extra-addons"
-      - "${ODOO_CONFIG_PATH:-odoo-config}:/opt/odoo-config"
-      - "${ODOO_FILESTORE:-odoo-filestore}:/var/lib/odoo/filestore"
-      - "${OPENMRS_CONFIG_PATH:-openmrs-config}:/opt/openmrs-config"
-      - ./properties/odoo/:/etc/properties/
-    ports:
-      - "${ODOO_PUBLIC_PORT}:8069"
-
-  # Odoo Connect: Integration layer between OpenMRS, Odoo and OpenELIS (?)
-  # aka 'Bahmni ERP Connect' or 'OpenERP Connect'
-  odoo-connect:
-    depends_on:
-      - postgresql
-      - odoo
-    image: mekomsolutions/odoo-connect:bahmni_latest
-    environment:
-      # Odoo
-      ODOO_DB_SERVER: postgresql
-      ODOO_DB: odoo
-      ODOO_DB_USERNAME: ${ODOO_DB_USER}
-      ODOO_DB_PASSWORD: ${ODOO_DB_PASSWORD}
-      ODOO_HOST: odoo
-      ODOO_USERNAME: ${ODOO_USER}
-      ODOO_PASSWORD: ${ODOO_PASSWORD}
-      # OpenMRS
-      OPENMRS_HOST: openmrs
-      OPENMRS_USER: ${OPENMRS_USER}
-      OPENMRS_PASSWORD: ${OPENMRS_PASSWORD}
-      # OpenELIS
-      OPENELIS_HOST: openelis
-      OPENELIS_USER: ${OPENELIS_USER:-openelis}
-      OPENELIS_PASSWORD: ${OPENELIS_PASSWORD:-password}
-      #
-      APP_PROPERTIES_FILE: "/usr/local/tomcat/erp-atomfeed.properties"
-    volumes:
-      - "./odoo-connect/conf/atomfeed.properties:/usr/local/tomcat/erp-atomfeed.properties"
-    networks:
-        bahmni:
-          aliases:
-            - odoo-connect
-  openelis:
-    image: mekomsolutions/openelis:bahmni_latest
-    depends_on:
-      - postgresql
-    environment:
-      OPENELIS_DB_HOST: postgresql
-      OPENMRS_HOST: openmrs
-      OPENMRS_USER: ${OPENMRS_USER}
-      OPENMRS_DB_SERVER: mysql
-      OPENMRS_DB_PASSWORD: ${OPENMRS_DB_PASSWORD}
-      OPENMRS_DB_USERNAME: ${OPENMRS_DB_USER}
-      OPENMRS_PASSWORD: ${OPENMRS_PASSWORD}
-      OPENELIS_DB_USER: ${OPENELIS_DB_USER}
-      OPENELIS_DB_PASSWORD: ${OPENELIS_DB_PASSWORD}
-      OPENELIS_DB_NAME: ${OPENELIS_DB_NAME}
-      ATOMFEED_PROPERTIES_FILE_PATH: ${ATOMFEED_PROPERTIES_FILE_PATH:-/usr/local/tomcat/.OpenELIS/atomfeed.properties}
-      HIBERNATE_PROPERTIES_FILE_PATH: ${HIBERNATE_PROPERTIES_FILE_PATH:-/usr/local/tomcat/.OpenELIS/hibernate.properties}
-    healthcheck:
-      test: "exit 0"
-    networks:
-      bahmni:
-        aliases:
-          - openelis
-    volumes:
-      - ./properties/openelis/:/etc/properties/
 
 version: "3.7"
 volumes:
@@ -407,9 +300,6 @@ volumes:
   bahmni-apps: ~
   bahmni-home: ~
   postgresql-data: ~
-  odoo-extra-addons: ~
-  odoo-config: ~
-  odoo-filestore: ~
   bahmni-reports-data: ~
 networks:
   bahmni:
