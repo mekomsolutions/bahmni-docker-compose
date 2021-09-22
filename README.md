@@ -138,6 +138,29 @@ services:
 
 To start OpenMRS with your own database, just drop your data file (`.sql` or `.sql.gz`) in the [./sqls/mysql/](./sqls/mysql/) folder and recreate your volumes (`docker-compose -v down`).
 
+### Start with a custom PostgreSQL dump
+1- Place database files:
+
+  To start Odoo with your own database, drop your file named as following "`odoo.tar`" in [./sqls/postgresql/restore](./sqls/postgresql/restore) folder.
+
+  To start OpenELIS with your own database, drop your file named as following "`clinlims.tar`" in [./sqls/postgresql/restore](./sqls/postgresql/restore) folder.
+
+2- Start PostgreSQL:
+
+```
+docker-compose -p $DISTRO_GROUP up -d postgresql
+```
+
+3- Start the restore service
+
+```
+docker-compose -p $DISTRO_GROUP -f postgres_restore.yml up
+```
+
+4- Start the rest of services:
+```
+docker-compose -p $DISTRO_GROUP up
+``` 
 
 ### Disable individual services
 If you are developing, you may not want to run the complete Bahmni suite.
