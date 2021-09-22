@@ -1,12 +1,5 @@
 #!/usr/bin/env bash
 
-# Create database credentials file
-cat > ~/.pgpass << EOF
-postgresql:${DB_PORT:-5432}:postgres:postgres:password
-EOF
-chmod 600 ~/.pgpass
-
-echo "file created"
 set -eu
 
 ODOO_BACKUP_FILE=/opt/restore/odoo.tar
@@ -20,8 +13,6 @@ function create_user() {
 		GRANT ALL PRIVILEGES ON DATABASE odoo TO $user;
 EOSQL
 }
-
-
 
 if [ -f "$ODOO_BACKUP_FILE" ]; then
 	create_user ${ODOO_DB_USER} ${ODOO_DB_PASSWORD}
@@ -51,8 +42,8 @@ if [ -f "$OPENELIS_BACKUP_FILE" ]; then
 	create_openelis_database ${OPENELIS_DB_NAME} ${OPENELIS_DB_USER} ${OPENELIS_DB_PASSWORD}
     set +e
 	echo "Import dump file"
-	PGPASSWORD=$OPENELIS_DB_PASSWORD pg_restore -h postgresql -U clinlims -d clinlims < $OPENELIS_BACKUP_FILE
-	PGPASSWORD= psql -h postgresql -U postgres -c "ALTER DATABASE clinlims OWNER TO clinlims;"
+	PGPASSWORD=$OPENELIS_DB_PASSWORD pg_restore -h postgresql -U ${OPENELIS_DB_USER} -d ${OPENELIS_DB_NAME} < $OPENELIS_BACKUP_FILE
+	PGPASSWORD=$OPENELIS_DB_PASSWORD psql -h postgresql -U postgres -c "ALTER DATABASE ${OPENELIS_DB_NAME} OWNER TO ${OPENELIS_DB_USER};"
 fi
 
 echo "Success."
