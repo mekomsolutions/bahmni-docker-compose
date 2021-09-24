@@ -2,7 +2,7 @@ services:
 
   # Apache HTTPD: Entry point for the application.
   proxy:
-    image: mekomsolutions/proxy:bahmni_latest
+    image: mekomsolutions/proxy:bahmni_7eafa8f
     command: "httpd-foreground ${PROXY_TLS}"
     healthcheck:
       test:
@@ -25,7 +25,7 @@ services:
   # Bahmni Apps: The main front-end component
   # aka 'Bahmni EMR'
   bahmniapps:
-    image: mekomsolutions/bahmniapps:bahmni_latest
+    image: mekomsolutions/bahmniapps:bahmni_7eafa8f
     healthcheck:
       test:
         - CMD
@@ -42,7 +42,7 @@ services:
 
   # Implementer Interface: Front-end application to bring Bahmni Forms 2.0
   implementer-interface:
-    image: mekomsolutions/implementer-interface:bahmni_latest
+    image: mekomsolutions/implementer-interface:bahmni_7eafa8f
     healthcheck:
       test:
         - CMD
@@ -56,7 +56,7 @@ services:
           - implementer-interface
 
   bahmni-home:
-    image: mekomsolutions/httpd:bahmni_latest
+    image: mekomsolutions/httpd:bahmni_7eafa8f
     expose:
       - "8904"
     healthcheck:
@@ -78,7 +78,7 @@ services:
 
   # Appointments
   appointments:
-    image: mekomsolutions/appointments:bahmni_latest
+    image: mekomsolutions/appointments:bahmni_7eafa8f
     healthcheck:
       test:
         - CMD
@@ -113,7 +113,7 @@ services:
 
   # OpenMRS:
   openmrs:
-    image: mekomsolutions/openmrs:bahmni_latest
+    image: mekomsolutions/openmrs:bahmni_7eafa8f
     depends_on:
       - mysql
     environment:
@@ -176,7 +176,7 @@ services:
 
   # Bahmni Reports: Standalone Java app to provide Reporting capabilities
   bahmni-reports:
-    image: mekomsolutions/bahmni-reports:bahmni_latest
+    image: mekomsolutions/bahmni-reports:bahmni_7eafa8f
     environment:
       # OpenMRS DB connection details
       OPENMRS_DB_HOSTNAME: mysql
@@ -222,7 +222,7 @@ services:
 
   # Bahmni Mart: Standalone JAVA app to schedule ETL tasks
   bahmni-mart:
-    image: mekomsolutions/bahmni-mart:bahmni_latest
+    image: mekomsolutions/bahmni-mart:bahmni_7eafa8f
     environment:
       # OpenMRS DB connection details
       OPENMRS_DB_HOST: mysql
@@ -256,7 +256,7 @@ services:
 
   # Metabase: Reporting paltform
   metabase:
-    image: mekomsolutions/metabase:bahmni_latest
+    image: mekomsolutions/metabase:bahmni_7eafa8f
     environment:
       MB_DB_TYPE: postgres
       MB_DB_PORT: 5432
@@ -312,7 +312,7 @@ services:
   odoo:
     depends_on:
       - postgresql
-    image: mekomsolutions/odoo:bahmni_latest
+    image: mekomsolutions/odoo:bahmni_7eafa8f
     environment:
       HOST: postgresql
       PORT: 5432
@@ -341,7 +341,7 @@ services:
     depends_on:
       - postgresql
       - odoo
-    image: mekomsolutions/odoo-connect:bahmni_latest
+    image: mekomsolutions/odoo-connect:bahmni_7eafa8f
     environment:
       # Odoo
       ODOO_DB_SERVER: postgresql
@@ -367,8 +367,9 @@ services:
         bahmni:
           aliases:
             - odoo-connect
+
   openelis:
-    image: mekomsolutions/openelis:bahmni_latest
+    image: mekomsolutions/openelis:bahmni_7eafa8f
     depends_on:
       - postgresql
     environment:
