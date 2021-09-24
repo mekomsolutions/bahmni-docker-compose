@@ -14,7 +14,7 @@ Docker Compose project to run Bahmni.
 
 ```
 export VERSION=1.0.0-SNAPSHOT
-mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -Dtransitive=false
+mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -Dtransitive=false --legacy-local-repository
 mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:copy -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -DoutputDirectory=.
 unzip bahmni-docker-compose-$VERSION.zip -d docker-compose
 ```
@@ -27,7 +27,7 @@ Fetch the distribution of your choice, Eg, Bahmni Distro **Haiti**:
 ```
 export DISTRO_GROUP="haiti"
 export DISTRO_VERSION="1.2.0-SNAPSHOT"
-mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-distro-$DISTRO_GROUP:$DISTRO_VERSION:zip -Dtransitive=false
+mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-distro-$DISTRO_GROUP:$DISTRO_VERSION:zip -Dtransitive=false --legacy-local-repository
 mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:copy -Dartifact=net.mekomsolutions:bahmni-distro-$DISTRO_GROUP:$DISTRO_VERSION:zip -DoutputDirectory=.
 unzip bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION.zip -d bahmni-distro-$DISTRO_GROUP
 ```
