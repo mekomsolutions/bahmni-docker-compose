@@ -134,33 +134,38 @@ services:
     - ...
 
 ```
+### Start with an appliance backup
+
+To start with the appliance backup files (See [here](https://github.com/mekomsolutions/appliance-deployment/blob/main/README.md#backup-profile) form more details on how to get the backup files) following these steps:
+
+1. Unzip the backup file and rename PostgreSQL database files to:
+  - OpenELIS : `clinlims.tar`
+  - Odoo : `odoo.tar`
+2. Move PostgreSQL database files to [./sqls/postgresql/restore](./sqls/postgresql/restore) folder
+3. For OpenMRS database please folow The steps [here](#start-with-a-custom-mysql-dump)
+4. Unzip the `filestore.zip` file and set the variables in `.env` file as following:
+   - Odoo:
+     - ODOO_FILESTORE=`<filestore-path>/odoo`
+   - OpenMRS:
+     - OPENMRS_LUCENE_PATH=`<filestore-path>/openmrs/lucene`
+     - OPENMRS_ACTIVEMQ_PATH=`<filestore-path>/openmrs/activemq-data`
+     - OPENMRS_CONFIG_CHECKSUMS_PATH=`<filestore-path>/openmrs/configuration_checksums`
+
+5. Start PostgreSQL:
+
+```
+docker-compose [-p <project-name>] up -d postgresql
+```
+
+6. Start the restore service
+
+```
+docker-compose [-p <project-name>] -f postgres_restore.yml up
+```
+
 ### Start with a custom MySQL dump
 
 To start OpenMRS with your own database, just drop your data file (`.sql` or `.sql.gz`) in the [./sqls/mysql/](./sqls/mysql/) folder and recreate your volumes (`docker-compose -v down`).
-
-### Start with a custom PostgreSQL dump
-1- Place database files:
-
-  To start Odoo with your own database, drop your file named as following "`odoo.tar`" in [./sqls/postgresql/restore](./sqls/postgresql/restore) folder.
-
-  To start OpenELIS with your own database, drop your file named as following "`clinlims.tar`" in [./sqls/postgresql/restore](./sqls/postgresql/restore) folder.
-
-2- Start PostgreSQL:
-
-```
-docker-compose -p $DISTRO_GROUP up -d postgresql
-```
-
-3- Start the restore service
-
-```
-docker-compose -p $DISTRO_GROUP -f postgres_restore.yml up
-```
-
-4- Start the rest of services:
-```
-docker-compose -p $DISTRO_GROUP up
-``` 
 
 ### Disable individual services
 If you are developing, you may not want to run the complete Bahmni suite.
