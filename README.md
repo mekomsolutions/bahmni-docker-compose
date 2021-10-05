@@ -150,7 +150,7 @@ To start with the appliance backup files (See [here](https://github.com/mekomsol
      - OPENMRS_LUCENE_PATH=`<filestore-path>/openmrs/lucene`
      - OPENMRS_ACTIVEMQ_PATH=`<filestore-path>/openmrs/activemq-data`
      - OPENMRS_CONFIG_CHECKSUMS_PATH=`<filestore-path>/openmrs/configuration_checksums`
-
+  Note: `<filestore-path>` is the path of the folder where `filestore.zip` file was unzipped. 
 5. Start PostgreSQL:
 
 ```
