@@ -1,0 +1,25 @@
+version: "3.7"
+services:
+  pg_restore:
+    image: mekomsolutions/postgres_backup
+    entrypoint: "./opt/restore/restore.sh"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      # Odoo DB vars
+      ODOO_DB_NAME: odoo
+      ODOO_DB_USER: ${ODOO_DB_USER}
+      ODOO_DB_PASSWORD: ${ODOO_DB_PASSWORD}
+      # OpenELIS DB Vars
+      OPENELIS_DB_USER: ${OPENELIS_DB_USER}
+      OPENELIS_DB_PASSWORD: ${OPENELIS_DB_PASSWORD}
+      OPENELIS_DB_NAME: ${OPENELIS_DB_NAME}
+    networks:
+      bahmni:
+        aliases:
+          - restore
+    volumes:
+      - "${SQL_SCRIPTS_PATH:-./sqls}/postgresql/restore:/opt/restore"
+networks:
+  bahmni:

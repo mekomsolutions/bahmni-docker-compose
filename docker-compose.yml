@@ -151,6 +151,8 @@ services:
       - "${OPENMRS_MODULES_PATH:-openmrs-modules}:/usr/local/tomcat/.OpenMRS/modules/"
       - "${OPENMRS_CONFIG_PATH:-openmrs-config}:/usr/local/tomcat/.OpenMRS/configuration/"
       - "${OPENMRS_CONFIG_CHECKSUMS_PATH:-openmrs-config-checksums}:/usr/local/tomcat/.OpenMRS/configuration_checksums/"
+      - "${OPENMRS_LUCENE_PATH:-openmrs-lucene}:/usr/local/tomcat/.OpenMRS/lucene"
+      - "${OPENMRS_ACTIVEMQ_PATH:-openmrs-active-mq}:/usr/local/tomcat/.OpenMRS/activemq-data"
       - "${BAHMNI_HOME_PATH:-bahmni-home}:/home/bahmni/"
       - "${BAHMNI_OBSCALCULATOR_PATH:-bahmni-obscalculator}:/usr/local/tomcat/.OpenMRS/obscalculator/"
       - ./properties/openmrs/:/etc/properties/
@@ -412,5 +414,7 @@ volumes:
   odoo-config: ~
   odoo-filestore: ~
   bahmni-reports-data: ~
+  openmrs-active-mq: ~
+  openmrs-lucene: ~
 networks:
   bahmni:

@@ -48,7 +48,7 @@ The complete list of available variables can be found in [.env](.env).
 ### Start Bahmni:
 
 ```
-cd docker-commpose
+cd docker-compose
 docker-compose -p $DISTRO_GROUP up
 ```
 <p align="center">
@@ -134,10 +134,46 @@ services:
     - ...
 
 ```
+### Start with an appliance backup
+
+To start with the appliance backup files (See [here](https://github.com/mekomsolutions/appliance-deployment/blob/main/README.md#backup-profile) for more details on how to get the backup files), follow these steps:
+
+1. Unzip the backup file and rename PostgreSQL database files to:
+  - OpenELIS : `clinlims.tar`
+  - Odoo : `odoo.tar`
+2. Move PostgreSQL database files to [./sqls/postgresql/restore](./sqls/postgresql/restore) folder
+3. For OpenMRS database please folow the steps [here](#start-with-a-custom-mysql-dump)
+4. Unzip the `filestore.zip` file and set the variables in `.env` file as following:
+   - Odoo:
+     - ODOO_FILESTORE=`<filestore-path>/odoo`
+   - OpenMRS:
+     - OPENMRS_LUCENE_PATH=`<filestore-path>/openmrs/lucene`
+     - OPENMRS_ACTIVEMQ_PATH=`<filestore-path>/openmrs/activemq-data`
+     - OPENMRS_CONFIG_CHECKSUMS_PATH=`<filestore-path>/openmrs/configuration_checksums`
+Note: `<filestore-path>` is the path of the folder where `filestore.zip` file was unzipped. 
+
+5. Start PostgreSQL:
+
+```
+docker-compose [-p <project-name>] up -d postgresql
+```
+
+6. Start the restore service
+
+```
+docker-compose [-p <project-name>] -f postgres_restore.yml up
+```
+
+
+Now The restore is done, you can turn off postgresql by 
+```
+docker-compose [-p <project-name>] stop postgresql
+``` 
+or simply start Bahmni as described [here](#start-bahmni) 
+
 ### Start with a custom MySQL dump
 
 To start OpenMRS with your own database, just drop your data file (`.sql` or `.sql.gz`) in the [./sqls/mysql/](./sqls/mysql/) folder and recreate your volumes (`docker-compose -v down`).
-
 
 ### Disable individual services
 If you are developing, you may not want to run the complete Bahmni suite.
