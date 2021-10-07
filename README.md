@@ -134,23 +134,24 @@ services:
     - ...
 
 ```
-### Start with an appliance backup
+### Start from a backup file
 
-To start with the appliance backup files (See [here](https://github.com/mekomsolutions/appliance-deployment/blob/main/README.md#backup-profile) for more details on how to get the backup files), follow these steps:
+To run a fresh system based on a production backup file (see [here](https://github.com/mekomsolutions/appliance-deployment/blob/main/README.md#backup-profile) for more details) follow these steps:
 
-1. Unzip the backup file and rename PostgreSQL database files to:
-  - OpenELIS : `clinlims.tar`
-  - Odoo : `odoo.tar`
+1. Unzip the backup file and rename PostgreSQL database files to **<database>.tar**:
+  Eg:
+  - OpenELIS : **clinlims.tar**
+  - Odoo : **odoo.tar**
 2. Move PostgreSQL database files to [./sqls/postgresql/restore](./sqls/postgresql/restore) folder
 3. For OpenMRS database please folow the steps [here](#start-with-a-custom-mysql-dump)
-4. Unzip the `filestore.zip` file and set the variables in `.env` file as following:
+4. Unzip the **filestore.zip** file and set the variables in **.env** file as following:
    - Odoo:
-     - ODOO_FILESTORE=`<filestore-path>/odoo`
+     - `ODOO_FILESTORE=<filestore-path>/odoo`
    - OpenMRS:
-     - OPENMRS_LUCENE_PATH=`<filestore-path>/openmrs/lucene`
-     - OPENMRS_ACTIVEMQ_PATH=`<filestore-path>/openmrs/activemq-data`
-     - OPENMRS_CONFIG_CHECKSUMS_PATH=`<filestore-path>/openmrs/configuration_checksums`
-Note: `<filestore-path>` is the path of the folder where `filestore.zip` file was unzipped. 
+     - `OPENMRS_LUCENE_PATH=<filestore-path>/openmrs/lucene`
+     - `OPENMRS_ACTIVEMQ_PATH=<filestore-path>/openmrs/activemq-data`
+     - `OPENMRS_CONFIG_CHECKSUMS_PATH=<filestore-path>/openmrs/configuration_checksums`
+Note: `<filestore-path>` is the path of the folder where **filestore.zip** file was unzipped. 
 
 5. Start PostgreSQL:
 
