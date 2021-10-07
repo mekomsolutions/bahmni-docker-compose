@@ -48,7 +48,7 @@ The complete list of available variables can be found in [.env](.env).
 ### Start Bahmni:
 
 ```
-cd docker-commpose
+cd docker-compose
 docker-compose -p $DISTRO_GROUP up
 ```
 <p align="center">
@@ -150,7 +150,8 @@ To start with the appliance backup files (See [here](https://github.com/mekomsol
      - OPENMRS_LUCENE_PATH=`<filestore-path>/openmrs/lucene`
      - OPENMRS_ACTIVEMQ_PATH=`<filestore-path>/openmrs/activemq-data`
      - OPENMRS_CONFIG_CHECKSUMS_PATH=`<filestore-path>/openmrs/configuration_checksums`
-  Note: `<filestore-path>` is the path of the folder where `filestore.zip` file was unzipped. 
+Note: `<filestore-path>` is the path of the folder where `filestore.zip` file was unzipped. 
+
 5. Start PostgreSQL:
 
 ```
@@ -162,6 +163,13 @@ docker-compose [-p <project-name>] up -d postgresql
 ```
 docker-compose [-p <project-name>] -f postgres_restore.yml up
 ```
+
+
+Now The restore is done, you can turn off postgresql by 
+```
+docker-compose [-p <project-name>] stop postgresql
+``` 
+or simply start bahmni as described [here](#start-bahmni) 
 
 ### Start with a custom MySQL dump
 
