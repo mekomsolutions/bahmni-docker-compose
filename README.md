@@ -169,7 +169,7 @@ Now The restore is done, you can turn off postgresql by
 ```
 docker-compose [-p <project-name>] stop postgresql
 ``` 
-or simply start bahmni as described [here](#start-bahmni) 
+or simply start Bahmni as described [here](#start-bahmni) 
 
 ### Start with a custom MySQL dump
 
