@@ -13,7 +13,7 @@ Docker Compose project to run Bahmni.
 ### Download the Docker Compose project:
 
 ```
-export VERSION=1.0.0-SNAPSHOT
+export VERSION=<version> # See pom.xml#L6 "project.version"
 mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -Dtransitive=false --legacy-local-repository
 mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:copy -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -DoutputDirectory=.
 unzip bahmni-docker-compose-$VERSION.zip -d docker-compose
@@ -23,7 +23,9 @@ unzip bahmni-docker-compose-$VERSION.zip -d docker-compose
 
 The Docker images do not provide a default Bahmni distribution so you need to first fetch one.
 
-Fetch the distribution of your choice, Eg, Bahmni Distro **Haiti**:
+Fetch the distribution of your choice:
+
+Eg, Bahmni Distro **Haiti**:
 ```
 export DISTRO_GROUP="haiti"
 export DISTRO_VERSION="1.2.0-SNAPSHOT"
