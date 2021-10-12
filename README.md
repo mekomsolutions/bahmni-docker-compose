@@ -16,7 +16,7 @@ Docker Compose project to run Bahmni.
 export VERSION=<version> # See pom.xml#L6 "project.version"
 mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -Dtransitive=false --legacy-local-repository
 mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:copy -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -DoutputDirectory=.
-unzip bahmni-docker-compose-$VERSION.zip -d docker-compose
+unzip bahmni-docker-compose-$VERSION.zip -d bahmni-docker-compose-$VERSION
 ```
 
 ### Download the Bahmni distribution of your choice:
@@ -31,14 +31,14 @@ export DISTRO_GROUP="haiti"
 export DISTRO_VERSION="1.2.0-SNAPSHOT"
 mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-distro-$DISTRO_GROUP:$DISTRO_VERSION:zip -Dtransitive=false --legacy-local-repository
 mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:copy -Dartifact=net.mekomsolutions:bahmni-distro-$DISTRO_GROUP:$DISTRO_VERSION:zip -DoutputDirectory=.
-unzip bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION.zip -d bahmni-distro-$DISTRO_GROUP
+unzip bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION.zip -d bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION
 ```
 
 
 The Bahmni Docker project relies on environment variable to document where the Distro is to be found.
 As an example, you can export the following variables:
 ```
-export DISTRO_PATH=bahmni-distro-$DISTRO_GROUP;  \
+export DISTRO_PATH=$PWD/bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION;  \
 export OPENMRS_CONFIG_PATH=$DISTRO_PATH/openmrs_config;  \
 export BAHMNI_CONFIG_PATH=$DISTRO_PATH/bahmni_config;  \
 export OPENMRS_MODULES_PATH=$DISTRO_PATH/openmrs_modules;  \
@@ -50,7 +50,7 @@ The complete list of available variables can be found in [.env](.env).
 ### Start Bahmni:
 
 ```
-cd docker-compose
+cd bahmni-docker-compose-$VERSION
 docker-compose -p $DISTRO_GROUP up
 ```
 <p align="center">
