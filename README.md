@@ -38,11 +38,14 @@ unzip bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION.zip -d bahmni-distro-$DISTRO_G
 The Bahmni Docker project relies on environment variable to document where the Distro is to be found.
 As an example, you can export the following variables:
 ```
-export DISTRO_PATH=$PWD/bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION;  \
-export OPENMRS_CONFIG_PATH=$DISTRO_PATH/openmrs_config;  \
-export BAHMNI_CONFIG_PATH=$DISTRO_PATH/bahmni_config;  \
-export OPENMRS_MODULES_PATH=$DISTRO_PATH/openmrs_modules;  \
-export BAHMNI_APPS_PATH=$DISTRO_PATH/bahmni_emr/bahmniapps
+export DISTRO_PATH=$PWD/bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION  \
+export OPENMRS_CONFIG_PATH=$DISTRO_PATH/openmrs_config  \
+export BAHMNI_CONFIG_PATH=$DISTRO_PATH/bahmni_config  \
+export OPENMRS_MODULES_PATH=$DISTRO_PATH/openmrs_modules  \
+export BAHMNI_APPS_PATH=$DISTRO_PATH/bahmni_emr/bahmniapps \
+export ODOO_CONFIG_PATH=$DISTRO_PATH/odoo_config \
+export ODOO_EXTRA_ADDONS=$DISTRO_PATH/odoo_addons \
+export ODOO_INITIALIZER_DATA_FILES_PATH="/opt/odoo-config"
 ```
 
 The complete list of available variables can be found in [.env](.env).
@@ -155,7 +158,7 @@ To run a fresh system based on a production backup file (see [here](https://gith
      - `OPENMRS_CONFIG_CHECKSUMS_PATH=<filestore-path>/openmrs/configuration_checksums`
      - `BAHMNI_HOME_PATH=<filestore-path>/openmrs/bahmni`
 
-Note: `<filestore-path>` is the path of the folder where **filestore.zip** file was unzipped. 
+Note: `<filestore-path>` is the path of the folder where **filestore.zip** file was unzipped.
 
 5. Start PostgreSQL:
 
@@ -170,11 +173,11 @@ docker-compose [-p <project-name>] -f postgres_restore.yml up
 ```
 
 
-Now The restore is done, you can turn off postgresql by 
+Now The restore is done, you can turn off postgresql by
 ```
 docker-compose [-p <project-name>] stop postgresql
-``` 
-or simply start Bahmni as described [here](#start-bahmni) 
+```
+or simply start Bahmni as described [here](#start-bahmni)
 
 ### Start with a custom MySQL dump
 
