@@ -10,10 +10,10 @@ Docker Compose project to run Bahmni.
 
 ## Quick Start
 
-### Download the Docker Compose project:
+### Download the Docker Compose project itself:
 
 ```
-export VERSION=<version> # See pom.xml#L6 "project.version"
+export VERSION=1.1.0-SNAPSHOT
 mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -Dtransitive=false --legacy-local-repository
 mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:copy -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -DoutputDirectory=.
 unzip bahmni-docker-compose-$VERSION.zip -d bahmni-docker-compose-$VERSION
@@ -116,29 +116,18 @@ If Docker is run as `sudo`, the variables won't have an effect. Make sure to eit
 
 ### TLS support
 
-To enable TLS support, just add the line:
+To enable TLS support, just export the variable:
 
 ```
-  command: "httpd-foreground -DenableTLS"
+export PROXY_TLS="-DenableTLS"
 ```
-to the `proxy` service in the [docker-compose.yml](./docker-compose.yml) file.
+and restart the application.
 
 Default certificates are self-signed and therefore unsecured.
 
 Provide your own valid certificates as a bound volume mounted at `/etc/tls/`.
 
-The `proxy` service would look like:
-```
-services:
-  proxy:
-    command: "httpd-foreground -DenableTLS"
-    build:
-      ...
-    volumes:
-    - "/etc/letsencrypt/live/domain.com/:/etc/tls/"
-    - ...
 
-```
 ### Start from a backup file
 
 To run a fresh system based on a production backup file (see [here](https://github.com/mekomsolutions/appliance-deployment/blob/main/README.md#backup-profile) for more details) follow these steps:
@@ -269,6 +258,12 @@ This will be added to the openmrs-runtime.properties file.
 ### All environment variables
 
 The complete list of available variables can be found in [.env](.env).
+
+## Dependencies
+
+- Docker
+- Docker Compose
+- Maven
 
 ## Known limitations
 
