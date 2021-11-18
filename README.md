@@ -10,13 +10,26 @@ Docker Compose project to run Bahmni.
 
 ## Quick Start
 
+### Create your working directory:
+
+Move to the location of your choice, eg, your home folder:
+```
+cd ~/
+```
+Then create the working directory and save the path:
+```
+export BAHMNI_DIR=$PWD/bahmni && \
+mkdir $BAHMNI_DIR
+```
+
 ### Download the Docker Compose project itself:
 
 ```
-export VERSION=1.1.0-SNAPSHOT
-mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -Dtransitive=false --legacy-local-repository
-mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:copy -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -DoutputDirectory=.
-unzip bahmni-docker-compose-$VERSION.zip -d bahmni-docker-compose-$VERSION
+export VERSION=1.1.0-SNAPSHOT && \
+# Download the project && \
+mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -Dtransitive=false --legacy-local-repository && \
+# Unzip the project in $BAHMNI_DIR/bahmni-docker-compose-$VERSION && \
+mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:unpack -Dproject.basedir=$BAHMNI_DIR -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -DoutputDirectory=$BAHMNI_DIR/bahmni-docker-compose-$VERSION
 ```
 
 ### Download the Bahmni distribution of your choice:
@@ -27,24 +40,25 @@ Fetch the distribution of your choice:
 
 Eg, Bahmni Distro **Haiti**:
 ```
-export DISTRO_GROUP="haiti"
-export DISTRO_VERSION="1.2.0-SNAPSHOT"
-mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-distro-$DISTRO_GROUP:$DISTRO_VERSION:zip -Dtransitive=false --legacy-local-repository
-mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:copy -Dartifact=net.mekomsolutions:bahmni-distro-$DISTRO_GROUP:$DISTRO_VERSION:zip -DoutputDirectory=.
-unzip bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION.zip -d bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION
+export DISTRO_GROUP="haiti" && \
+export DISTRO_VERSION="1.2.0-SNAPSHOT" && \
+# Download the distro && \
+mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-distro-$DISTRO_GROUP:$DISTRO_VERSION:zip -Dtransitive=false --legacy-local-repository && \
+# Unzip the distro in $BAHMNI_DIR/bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION && \
+mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:unpack -Dproject.basedir=$BAHMNI_DIR -Dartifact=net.mekomsolutions:bahmni-distro-$DISTRO_GROUP:$DISTRO_VERSION:zip -DoutputDirectory=$BAHMNI_DIR/bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION
 ```
 
 
 The Bahmni Docker project relies on environment variable to document where the Distro is to be found.
 As an example, you can export the following variables:
 ```
-export DISTRO_PATH=$PWD/bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION  \
-export OPENMRS_CONFIG_PATH=$DISTRO_PATH/openmrs_config  \
-export BAHMNI_CONFIG_PATH=$DISTRO_PATH/bahmni_config  \
-export OPENMRS_MODULES_PATH=$DISTRO_PATH/openmrs_modules  \
-export BAHMNI_APPS_PATH=$DISTRO_PATH/bahmni_emr/bahmniapps \
-export ODOO_CONFIG_PATH=$DISTRO_PATH/odoo_config \
-export ODOO_EXTRA_ADDONS=$DISTRO_PATH/odoo_addons \
+export DISTRO_PATH=$BAHMNI_DIR/bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION && \
+export OPENMRS_CONFIG_PATH=$DISTRO_PATH/openmrs_config && \
+export BAHMNI_CONFIG_PATH=$DISTRO_PATH/bahmni_config && \
+export OPENMRS_MODULES_PATH=$DISTRO_PATH/openmrs_modules && \
+export BAHMNI_APPS_PATH=$DISTRO_PATH/bahmni_emr/bahmniapps && \
+export ODOO_CONFIG_PATH=$DISTRO_PATH/odoo_config && \
+export ODOO_EXTRA_ADDONS=$DISTRO_PATH/odoo_addons && \
 export ODOO_INITIALIZER_DATA_FILES_PATH="/opt/odoo-config"
 ```
 
@@ -53,7 +67,7 @@ The complete list of available variables can be found in [.env](.env).
 ### Start Bahmni:
 
 ```
-cd bahmni-docker-compose-$VERSION
+cd $BAHMNI_DIR/bahmni-docker-compose-$VERSION && \
 docker-compose -p $DISTRO_GROUP up
 ```
 <p align="center">
