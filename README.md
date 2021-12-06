@@ -25,7 +25,7 @@ mkdir $BAHMNI_DIR
 ### Download the Docker Compose project itself:
 
 ```
-export VERSION=1.1.0-SNAPSHOT && \
+export VERSION=1.1.0 && \
 # Download the project && \
 mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -Dtransitive=false --legacy-local-repository && \
 # Unzip the project in $BAHMNI_DIR/bahmni-docker-compose-$VERSION && \
