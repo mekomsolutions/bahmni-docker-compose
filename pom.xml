@@ -3,7 +3,7 @@
   <groupId>net.mekomsolutions</groupId>
   <artifactId>bahmni-docker-compose</artifactId>
   <name>Bahmni Docker Compose</name>
-  <version>1.1.0</version>
+  <version>1.2.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <developers>
