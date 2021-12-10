@@ -1,0 +1,47 @@
+<routes xmlns="http://camel.apache.org/schema/spring">
+
+	<route id="odoo-fetch-resource" errorHandlerRef="watcherErrorHandler">
+		<from uri="direct:odoo-fetch-resource" />
+
+		<log message="Start: route with id ${routeId}" loggingLevel="DEBUG" />
+
+        <choice>
+            <when>
+                <simple>${exchangeProperty.isSubResource} == true</simple>
+                <setProperty name="resourceUrl">
+                    <simple>{{openmrs.baseUrl}}/ws/rest/v1/${exchangeProperty.resourceName}/${exchangeProperty.resourceId}/${exchangeProperty.subResourceName}/${exchangeProperty.subResourceId}</simple>
+                </setProperty>
+            </when>
+            <otherwise>
+                <setProperty name="resourceUrl">
+                    <simple>{{openmrs.baseUrl}}/ws/rest/v1/${exchangeProperty.resourceName}/${exchangeProperty.resourceId}</simple>
+                </setProperty>
+            </otherwise>
+        </choice>
+
+		<setBody>
+			<simple>${null}</simple>
+		</setBody>
+
+		<toD uri="${exchangeProperty.resourceUrl}?throwExceptionOnFailure=false&amp;httpMethod=GET&amp;authMethod=Basic&amp;authUsername={{openmrs.username}}&amp;authPassword={{openmrs.password}}" />
+
+        <choice>
+            <when>
+                <simple>${headers.CamelHttpResponseCode} == 404</simple>
+                <log message="Resource Not Found -> Response Status Code: ${headers.CamelHttpResponseCode}, Response Body: ${body}" />
+
+                <setBody>
+                    <simple>${null}</simple>
+                </setBody>
+            </when>
+            <otherwise>
+                <when>
+                    <simple>${headers.CamelHttpResponseCode} != 200</simple>
+                    <throwException exceptionType="org.openmrs.eip.EIPException" message="An error occurred while fetching the resource from OpenMRS" />
+                </when>
+            </otherwise>
+        </choice>
+
+		<log message="End: route with id ${routeId}" loggingLevel="DEBUG" />
+	</route>
+</routes>

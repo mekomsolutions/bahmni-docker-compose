@@ -1,0 +1,59 @@
+<routes xmlns="http://camel.apache.org/schema/spring">
+
+	<route id="odoo-get-draft-quotations" errorHandlerRef="watcherErrorHandler">
+		<from uri="direct:odoo-get-draft-quotations" />
+
+		<log message="Start: route with id ${routeId}" loggingLevel="DEBUG" />
+
+		<setProperty name="xmlrpc-client-config">
+			<spel>#{new org.apache.xmlrpc.client.XmlRpcClientConfigImpl()}</spel>
+		</setProperty>
+		<setProperty name="xmlrpc-client">
+			<spel>#{new org.apache.xmlrpc.client.XmlRpcClient()}</spel>
+		</setProperty>
+		<script>
+			<spel>
+				#{getProperty('xmlrpc-client-config').setServerURL(new java.net.URL('{{odoo.baseUrl}}/xmlrpc/2/object'))}
+			</spel>
+		</script>
+
+		<!-- Get existing draft quotations for the patient created by this system's user account -->
+		<setProperty name="partner-id-criterion">
+			<spel>#{new Object[]{'partner_id', '=', getProperty('patient-odoo-id')}}</spel>
+		</setProperty>
+		<setProperty name="creator-id-criterion">
+			<spel>#{new Object[]{'create_uid', '=', T(java.lang.Integer).valueOf(getProperty('odoo-user-id'))}}</spel>
+		</setProperty>
+		<setProperty name="state-criterion">
+			<spel>#{new Object[]{'state', '=', 'draft'}}</spel>
+		</setProperty>
+		<setProperty name="search-query">
+			<spel>#{new Object[]{new Object[]{getProperty('partner-id-criterion'), getProperty('creator-id-criterion'), getProperty('state-criterion')}}}</spel>
+		</setProperty>
+		<setProperty name="search-attributes">
+			<spel>#{T(java.util.Collections).singletonMap('fields', new Object[]{'id', 'order_line'})}</spel>
+		</setProperty>
+		<setProperty name="get-quotation-params">
+			<spel>#{new java.util.ArrayList(7)}</spel>
+		</setProperty>
+		<script>
+			<spel>
+				#{getProperty('get-quotation-params').add('{{odoo.database}}')}
+				#{getProperty('get-quotation-params').add(getProperty('odoo-user-id'))}
+				#{getProperty('get-quotation-params').add('{{odoo.password}}')}
+				#{getProperty('get-quotation-params').add('sale.order')}
+				#{getProperty('get-quotation-params').add('search_read')}
+				#{getProperty('get-quotation-params').add(getProperty('search-query'))}
+				#{getProperty('get-quotation-params').add(getProperty('search-attributes'))}
+			</spel>
+		</script>
+		<setBody>
+			<spel>
+				#{getProperty('xmlrpc-client').execute(getProperty('xmlrpc-client-config'), 'execute_kw', getProperty('get-quotation-params'))}
+			</spel>
+		</setBody>
+
+		<log message="End: route with id ${routeId}" loggingLevel="DEBUG" />
+	</route>
+
+</routes>

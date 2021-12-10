@@ -1,3 +1,4 @@
+version: "3.7"
 services:
 
   # Apache HTTPD: Entry point for the application.
@@ -160,7 +161,7 @@ services:
   # MySQL
   mysql:
     image: "mariadb:10.3"
-    command: "mysqld --character-set-server=utf8 --collation-server=utf8_general_ci"
+    command: "mysqld --character-set-server=utf8 --collation-server=utf8_general_ci --log-bin --binlog-format=ROW  --server-id=2"
     environment:
       MYSQL_DATABASE: openmrs
       MYSQL_USER: ${OPENMRS_DB_USER}
@@ -280,6 +281,11 @@ services:
   # Postgreql: Database shared by multiple services
   postgresql:
     image: postgres:9.6-alpine
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 10s
+      retries: 15
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: ${POSTGRES_USER}
@@ -313,62 +319,39 @@ services:
   # Odoo: The ERP component of Bahmni
   odoo:
     depends_on:
-      - postgresql
-    image: mekomsolutions/odoo:bahmni_latest
+      postgresql:
+        condition: service_healthy
+    image: mekomsolutions/odoo
     environment:
-      HOST: postgresql
-      PORT: 5432
-      USER: ${ODOO_DB_USER}
-      PASSWORD: ${ODOO_DB_PASSWORD}
-      DB_NAME: odoo
-      MASTER_PASSWORD: ${ODOO_MASTER_PASSWORD}
-      INITIALIZER_DATA_FILES_PATH: ${ODOO_INITIALIZER_DATA_FILES_PATH}
-      INITIALIZER_CONFIG_FILE_PATH: ${ODOO_INITIALIZER_CONFIG_FILE_PATH}
+      - HOST=${POSTGRES_DB_HOST}
+      - USER=${ODOO_DB_USER}
+      - PASSWORD=${ODOO_DB_PASSWORD}
+      - ADDONS=sale_management,stock,account_account,odoo_initializer,ozone_settings
+      - INITIALIZER_DATA_FILES_PATH=/mnt/odoo_csv
+      - INITIALIZER_CONFIG_FILE_PATH=/mnt/initializer_config/initializer_config.json
     networks:
       bahmni:
         aliases:
-          - odoo-10
+          - odoo-14
     volumes:
-      - "${ODOO_EXTRA_ADDONS:-odoo-extra-addons}:/mnt/extra-addons"
-      - "${ODOO_CONFIG_PATH:-odoo-config}:/opt/odoo-config"
       - "${ODOO_FILESTORE:-odoo-filestore}:/var/lib/odoo/filestore"
-      - "${OPENMRS_CONFIG_PATH:-openmrs-config}:/opt/openmrs-config"
-      - ./properties/odoo/:/etc/properties/
+      - "${ODOO_EXTRA_ADDONS:-odoo-extra-addons}:/mnt/extra-addons"
+      - "${ODOO_CONFIG_PATH:-odoo-config}:/mnt/odoo_csv"
+      - "${ODOO_INITIALIZER_CONFIG_FILE_PATH:-odoo-config}:/mnt/initializer_config/initializer_config.json"
+      - "${ODOO_CONFIG_CHECKSUM_PATH:-odoo-checksums}:/mnt/odoo_csv_checksum"
     ports:
-      - "${ODOO_PUBLIC_PORT}:8069"
+      - "${ODOO_PUBLIC_PORT:-8069}:8069"
 
-  # Odoo Connect: Integration layer between OpenMRS, Odoo and OpenELIS (?)
-  # aka 'Bahmni ERP Connect' or 'OpenERP Connect'
-  odoo-connect:
-    depends_on:
-      - postgresql
-      - odoo
-    image: mekomsolutions/odoo-connect:bahmni_latest
-    environment:
-      # Odoo
-      ODOO_DB_SERVER: postgresql
-      ODOO_DB: odoo
-      ODOO_DB_USERNAME: ${ODOO_DB_USER}
-      ODOO_DB_PASSWORD: ${ODOO_DB_PASSWORD}
-      ODOO_HOST: odoo
-      ODOO_USERNAME: ${ODOO_USER}
-      ODOO_PASSWORD: ${ODOO_PASSWORD}
-      # OpenMRS
-      OPENMRS_HOST: openmrs
-      OPENMRS_USER: ${OPENMRS_USER}
-      OPENMRS_PASSWORD: ${OPENMRS_PASSWORD}
-      # OpenELIS
-      OPENELIS_HOST: openelis
-      OPENELIS_USER: ${OPENELIS_USER:-openelis}
-      OPENELIS_PASSWORD: ${OPENELIS_PASSWORD:-password}
-      #
-      APP_PROPERTIES_FILE: "/usr/local/tomcat/erp-atomfeed.properties"
-    volumes:
-      - "./odoo-connect/conf/atomfeed.properties:/usr/local/tomcat/erp-atomfeed.properties"
-    networks:
+  eip_client: 
+      image: mekomsolutions/eip-client
+      volumes:
+        - "./properties/eip_client/config:/config"
+        - "./properties/eip_client/routes:/routes"
+        - eip-home:/eip-home
+      networks:
         bahmni:
           aliases:
-            - odoo-connect
+            - eip_client
 
   openelis:
     image: mekomsolutions/openelis:bahmni_latest
@@ -396,7 +379,6 @@ services:
     volumes:
       - ./properties/openelis/:/etc/properties/
 
-version: "3.7"
 volumes:
   proxy-tls-certs: ~
   openmrs-data: ~
@@ -416,5 +398,7 @@ volumes:
   bahmni-reports-data: ~
   openmrs-active-mq: ~
   openmrs-lucene: ~
+  eip-home: ~
+  odoo-checksums: ~
 networks:
   bahmni:

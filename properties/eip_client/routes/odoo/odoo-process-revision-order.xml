@@ -1,0 +1,68 @@
+<routes xmlns="http://camel.apache.org/schema/spring">
+
+	<route id="odoo-process-revision-order" errorHandlerRef="watcherErrorHandler">
+		<from uri="direct:odoo-process-revision-order" />
+
+		<log message="Start: route with id ${routeId}" loggingLevel="DEBUG" />
+
+		<choice>
+			<when>
+				<simple>${exchangeProperty.order-line} == null</simple>
+				<setProperty name="odoo-operation">
+					<simple>create</simple>
+				</setProperty>
+
+				<log message="Adding new order line to the quotation" />
+
+				<to uri="direct:odoo-manage-order-line" />
+			</when>
+			<otherwise>
+				<choice>
+					<when>
+						<simple>${exchangeProperty.is-drug-order} == true</simple>
+                        <when>
+                            <simple>${exchangeProperty.order-quantity} != ${exchangeProperty.order-line.get('product_uom_qty')}</simple>
+                            <log message="Orderable quantity changed from ${exchangeProperty.order-line.get('product_uom_qty')} to ${exchangeProperty.order-quantity}" />
+
+                            <setProperty name="hasChanges">
+                                <simple>true</simple>
+                            </setProperty>
+                        </when>
+
+                        <when>
+                            <simple>${exchangeProperty.unitsId} != ${exchangeProperty.order-line.get('product_uom')[0]}</simple>
+                            <log message="Orderable quantity units changed from ${exchangeProperty.order-line.get('product_uom')[0]} to ${exchangeProperty.unitsId}" />
+
+                            <setProperty name="hasChanges">
+                                <simple>true</simple>
+                            </setProperty>
+                        </when>
+
+						<choice>
+							<when>
+								<simple>${exchangeProperty.hasChanges} == true</simple>
+								<setProperty name="odoo-operation">
+									<simple>write</simple>
+								</setProperty>
+
+								<log message="Found changes, updating order line" />
+
+								<to uri="direct:odoo-manage-order-line" />
+							</when>
+							<otherwise>
+								<log message="Order quantity and units are the same as those in odoo, nothing to update" />
+							</otherwise>
+						</choice>
+					</when>
+					<otherwise>
+						<!-- There is nothing we can update about an order in odoo except quantity and units which only apply to drug orders -->
+						<log message="There is nothing to update in odoo about a non drug order" />
+					</otherwise>
+				</choice>
+			</otherwise>
+		</choice>
+
+		<log message="End: route with id ${routeId}" loggingLevel="DEBUG" />
+	</route>
+
+</routes>
