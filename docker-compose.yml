@@ -1,6 +1,32 @@
 version: "3.7"
 services:
 
+  env-substitution:
+    image:  mekomsolutions/env-substitution
+    environment:
+      - KEYCLOAK_URL=
+      - EIP_CLIENT_SECRET=
+      - OPENMRS_URL=openmrs
+      - ODOO_URL=odoo:8069
+      - ODOO_DATABASE=${ODOO_DATABASE}
+      - ODOO_USER=${ODOO_USER}
+      - ODOO_PASSWORD=${ODOO_PASSWORD}
+      - OPENMRS_DB_HOST=${OPENMRS_DB_HOST}
+      - OPENMRS_DB_PORT=${OPENMRS_DB_PORT}
+      - OPENMRS_DB_NAME=${OPENMRS_DB_NAME}
+      - OPENMRS_DB_USER=${OPENMRS_DB_USER}
+      - OPENMRS_DB_PASSWORD=${OPENMRS_DB_PASSWORD}
+      - OPENMRS_USER=${OPENMRS_USER}
+      - OPENMRS_PASSWORD=${OPENMRS_PASSWORD}
+      - MYSQL_ADMIN_USER=root
+      - MYSQL_ADMIN_USER_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    volumes:
+       - "${DISTRO_PATH}:/opt/env-substitution/files"
+    networks:
+      bahmni:
+        aliases:
+          - env-substitution
+
   # Apache HTTPD: Entry point for the application.
   proxy:
     image: mekomsolutions/proxy:bahmni_latest
@@ -342,16 +368,19 @@ services:
     ports:
       - "${ODOO_PUBLIC_PORT:-8069}:8069"
 
-  eip_client: 
-      image: mekomsolutions/eip-client
-      volumes:
-        - "./properties/eip_client/config:/config"
-        - "./properties/eip_client/routes:/routes"
-        - eip-home:/eip-home
-      networks:
-        bahmni:
-          aliases:
-            - eip_client
+  eip_client:
+    depends_on:
+      env-substitution:
+        condition: service_completed_successfully
+    image: mekomsolutions/eip-client
+    volumes:
+      - "${EIP_CONFIG_PATH:-./properties/eip_client}/config:/config"
+      - "${EIP_CONFIG_PATH:-./properties/eip_client}/routes:/routes"
+      - eip-home:/eip-home
+    networks:
+      bahmni:
+        aliases:
+          - eip_client
 
   openelis:
     image: mekomsolutions/openelis:bahmni_latest
