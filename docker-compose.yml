@@ -11,8 +11,8 @@ services:
       - ODOO_DATABASE=${ODOO_DATABASE}
       - ODOO_USER=${ODOO_USER}
       - ODOO_PASSWORD=${ODOO_PASSWORD}
-      - OPENMRS_DB_HOST=${OPENMRS_DB_HOST}
-      - OPENMRS_DB_PORT=${OPENMRS_DB_PORT}
+      - OPENMRS_DB_HOST=mysql
+      - OPENMRS_DB_PORT=3306
       - OPENMRS_DB_NAME=${OPENMRS_DB_NAME}
       - OPENMRS_DB_USER=${OPENMRS_DB_USER}
       - OPENMRS_DB_PASSWORD=${OPENMRS_DB_PASSWORD}
@@ -374,9 +374,9 @@ services:
         condition: service_completed_successfully
     image: mekomsolutions/eip-client
     volumes:
-      - "${EIP_CONFIG_PATH:-./properties/eip_client}/config:/config"
-      - "${EIP_CONFIG_PATH:-./properties/eip_client}/routes:/routes"
-      - eip-home:/eip-home
+      - "${EIP_CONFIG_PATH:-eip-client}/config:/config"
+      - "${EIP_CONFIG_PATH:-eip-client}/routes:/routes"
+      - "${EIP_HOME_PATH:-eip-home}:/eip-home"
     networks:
       bahmni:
         aliases:
@@ -428,6 +428,7 @@ volumes:
   openmrs-active-mq: ~
   openmrs-lucene: ~
   eip-home: ~
+  eip-client: ~
   odoo-checksums: ~
 networks:
   bahmni:
