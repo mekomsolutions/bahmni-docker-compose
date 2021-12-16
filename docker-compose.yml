@@ -8,12 +8,12 @@ services:
       - EIP_CLIENT_SECRET=83b22049-3bf7-4809-89f4-00eb4bbdeb4b
       - OPENMRS_URL=http://openmrs:8080
       - ODOO_URL=http://odoo:8069
-      - ODOO_DATABASE=${ODOO_DATABASE}
+      - ODOO_DATABASE=odoo
       - ODOO_USER=${ODOO_USER}
       - ODOO_PASSWORD=${ODOO_PASSWORD}
       - OPENMRS_DB_HOST=mysql
       - OPENMRS_DB_PORT=3306
-      - OPENMRS_DB_NAME=${OPENMRS_DB_NAME}
+      - OPENMRS_DB_NAME=openmrs
       - OPENMRS_DB_USER=${OPENMRS_DB_USER}
       - OPENMRS_DB_PASSWORD=${OPENMRS_DB_PASSWORD}
       - OPENMRS_USER=${OPENMRS_USER}
@@ -349,7 +349,7 @@ services:
         condition: service_healthy
     image: mekomsolutions/odoo
     environment:
-      - HOST=${POSTGRES_DB_HOST}
+      - HOST=odoo-postgresql
       - USER=${ODOO_DB_USER}
       - PASSWORD=${ODOO_DB_PASSWORD}
       - ADDONS=sale_management,stock,account_account,odoo_initializer,ozone_settings,mrp
