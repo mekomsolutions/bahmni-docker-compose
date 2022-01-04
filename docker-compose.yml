@@ -20,8 +20,8 @@ services:
       - OPENMRS_PASSWORD=${OPENMRS_PASSWORD}
       - MYSQL_ADMIN_USER=root
       - MYSQL_ADMIN_USER_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - SPRING_MNGT_USER=name
-      - SPRING_MNGT_PASSWORD=pasword
+      - SPRING_MNGT_USER=${EIP_SPRING_USER:-name}
+      - SPRING_MNGT_PASSWORD=${EIP_SPRING_PASSWORD:-password}
     volumes:
        - "${DISTRO_PATH}:/opt/env-substitution/files"
     networks:
