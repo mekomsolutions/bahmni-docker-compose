@@ -370,7 +370,7 @@ services:
     ports:
       - "${ODOO_PUBLIC_PORT:-8069}:8069"
 
-  eip_client:
+  eip-client:
     depends_on:
       env-substitution:
         condition: service_completed_successfully
@@ -382,7 +382,7 @@ services:
     networks:
       bahmni:
         aliases:
-          - eip_client
+          - eip-client
 
   openelis:
     image: mekomsolutions/openelis:bahmni_latest
