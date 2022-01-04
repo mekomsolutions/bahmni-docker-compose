@@ -59,7 +59,8 @@ export OPENMRS_MODULES_PATH=$DISTRO_PATH/openmrs_modules && \
 export BAHMNI_APPS_PATH=$DISTRO_PATH/bahmni_emr/bahmniapps && \
 export ODOO_CONFIG_PATH=$DISTRO_PATH/odoo_config && \
 export ODOO_EXTRA_ADDONS=$DISTRO_PATH/odoo_addons && \
-export ODOO_INITIALIZER_DATA_FILES_PATH="/opt/odoo-config"
+export ODOO_INITIALIZER_DATA_FILES_PATH="/opt/odoo-config" && \
+export EIP_CONFIG_PATH=$DISTRO_PATH/eip_config
 ```
 
 The complete list of available variables can be found in [.env](.env).

@@ -20,6 +20,8 @@ services:
       - OPENMRS_PASSWORD=${OPENMRS_PASSWORD}
       - MYSQL_ADMIN_USER=root
       - MYSQL_ADMIN_USER_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - SPRING_MNGT_USER=${EIP_SPRING_USER:-name}
+      - SPRING_MNGT_PASSWORD=${EIP_SPRING_PASSWORD:-password}
     volumes:
        - "${DISTRO_PATH}:/opt/env-substitution/files"
     networks:
@@ -352,7 +354,7 @@ services:
       - HOST=odoo-postgresql
       - USER=${ODOO_DB_USER}
       - PASSWORD=${ODOO_DB_PASSWORD}
-      - ADDONS=sale_management,stock,account_account,odoo_initializer,ozone_settings,mrp,purchase
+      - ADDONS=sale_management,stock,account_account,odoo_initializer,mrp,purchase
       - INITIALIZER_DATA_FILES_PATH=/mnt/odoo_csv
       - INITIALIZER_CONFIG_FILE_PATH=/mnt/initializer_config/initializer_config.json
     networks:
