@@ -354,7 +354,7 @@ services:
       - HOST=odoo-postgresql
       - USER=${ODOO_DB_USER}
       - PASSWORD=${ODOO_DB_PASSWORD}
-      - ADDONS=sale_management,stock,account_account,odoo_initializer,mrp,purchase
+      - ADDONS=sale_management,stock,account_account,odoo_initializer,mrp,purchase,mrp_product_expiry,product_expiry
       - INITIALIZER_DATA_FILES_PATH=/mnt/odoo_csv
       - INITIALIZER_CONFIG_FILE_PATH=/mnt/odoo_csv/initializer_config.json
     networks:
