@@ -198,13 +198,7 @@ You can disable services by adding **docker-compose.override.yml** file at the p
 version: "3.7"
 
 services:
-  metabase:
-    entrypoint: ["echo", "[ERROR] Service is disabled in docker-compose.override.yml file"]
-  bahmni-mart:
-    entrypoint: ["echo", "[ERROR] Service is disabled in docker-compose.override.yml file"]
   odoo:
-    entrypoint: ["echo", "[ERROR] Service is disabled in docker-compose.override.yml file"]
-  odoo-connect:
     entrypoint: ["echo", "[ERROR] Service is disabled in docker-compose.override.yml file"]
   postgresql:
     entrypoint: ["echo", "[ERROR] Service is disabled in docker-compose.override.yml file"]
@@ -287,6 +281,5 @@ The complete list of available variables can be found in [.env](.env).
   - Bahmni Config
   - Bahmni Mart
   - Metabase
-  - Odoo
-  - Odoo Connect
+  - Odoo 14 (Odoo 10 supported on branch 1.x using Odoo Connect)
   - OpenELIS
