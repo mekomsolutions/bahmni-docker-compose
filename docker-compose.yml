@@ -22,6 +22,9 @@ services:
       - MYSQL_ADMIN_USER_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - SPRING_MNGT_USER=${EIP_SPRING_USER:-name}
       - SPRING_MNGT_PASSWORD=${EIP_SPRING_PASSWORD:-password}
+      - EIP_DB_NAME=${EIP_DB_NAME}
+      - EIP_DB_USER=${EIP_DB_USER}
+      - EIP_DB_PASSWORD=${EIP_DB_PASSWORD}
     volumes:
        - "${DISTRO_PATH}:/opt/env-substitution/files"
     networks:
@@ -195,6 +198,9 @@ services:
       MYSQL_USER: ${OPENMRS_DB_USER}
       MYSQL_PASSWORD: ${OPENMRS_DB_PASSWORD}
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      EIP_DB_NAME: ${EIP_DB_NAME}
+      EIP_DB_USER: ${EIP_DB_USER}
+      EIP_DB_PASSWORD: ${EIP_DB_PASSWORD}
     healthcheck:
       test: "exit 0"
     networks:
