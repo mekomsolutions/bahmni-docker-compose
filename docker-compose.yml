@@ -384,6 +384,18 @@ services:
       - "${EIP_CONFIG_PATH:-eip-client}/config:/config"
       - "${EIP_CONFIG_PATH:-eip-client}/routes:/routes"
       - "${EIP_HOME_PATH:-eip-home}:/eip-home"
+    environment:
+      - EIP_DB_NAME=${EIP_DB_NAME}
+      - EIP_DB_USER=${EIP_DB_USER}
+      - EIP_DB_PASSWORD=${EIP_DB_PASSWORD}
+      - MYSQL_DATABASE=openmrs
+      - MYSQL_USER=${OPENMRS_DB_USER}
+      - MYSQL_PASSWORD=${OPENMRS_DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - DB_HOST=mysql
+      - DB_DATABASE=openmrs
+      - DB_USERNAME=${OPENMRS_DB_USER}
+      - DB_PASSWORD=${OPENMRS_DB_PASSWORD}
     networks:
       bahmni:
         aliases:
