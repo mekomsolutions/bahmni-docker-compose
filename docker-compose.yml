@@ -1,37 +1,5 @@
 version: "3.7"
 services:
-
-  env-substitution:
-    image:  mekomsolutions/env-substitution
-    environment:
-      - KEYCLOAK_URL=
-      - EIP_CLIENT_SECRET=83b22049-3bf7-4809-89f4-00eb4bbdeb4b
-      - OPENMRS_URL=http://openmrs:8080
-      - ODOO_URL=http://odoo:8069
-      - ODOO_DATABASE=odoo
-      - ODOO_USER=${ODOO_USER}
-      - ODOO_PASSWORD=${ODOO_PASSWORD}
-      - OPENMRS_DB_HOST=mysql
-      - OPENMRS_DB_PORT=3306
-      - OPENMRS_DB_NAME=openmrs
-      - OPENMRS_DB_USER=${OPENMRS_DB_USER}
-      - OPENMRS_DB_PASSWORD=${OPENMRS_DB_PASSWORD}
-      - OPENMRS_USER=${OPENMRS_USER}
-      - OPENMRS_PASSWORD=${OPENMRS_PASSWORD}
-      - MYSQL_ADMIN_USER=root
-      - MYSQL_ADMIN_USER_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - SPRING_MNGT_USER=${EIP_SPRING_USER:-name}
-      - SPRING_MNGT_PASSWORD=${EIP_SPRING_PASSWORD:-password}
-      - EIP_DB_NAME=${EIP_DB_NAME}
-      - EIP_DB_USER=${EIP_DB_USER}
-      - EIP_DB_PASSWORD=${EIP_DB_PASSWORD}
-    volumes:
-       - "${DISTRO_PATH}:/opt/env-substitution/files"
-    networks:
-      bahmni:
-        aliases:
-          - env-substitution
-
   # Apache HTTPD: Entry point for the application.
   proxy:
     image: mekomsolutions/proxy:bahmni_latest
@@ -376,25 +344,43 @@ services:
 
   eip-client:
     depends_on:
-      env-substitution:
-        condition: service_completed_successfully
+      mysql:
+        condition: service_started
     image: mekomsolutions/eip-client
+    restart: on-failure
     volumes:
       - "${EIP_CONFIG_PATH:-eip-client}/config:/config"
       - "${EIP_CONFIG_PATH:-eip-client}/routes:/routes"
       - "${EIP_HOME_PATH:-eip-home}:/eip-home"
     environment:
-      - EIP_DB_NAME=${EIP_DB_NAME}
-      - EIP_DB_USER=${EIP_DB_USER}
-      - EIP_DB_PASSWORD=${EIP_DB_PASSWORD}
       - MYSQL_DATABASE=openmrs
       - MYSQL_USER=${OPENMRS_DB_USER}
       - MYSQL_PASSWORD=${OPENMRS_DB_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - DB_HOST=mysql
       - DB_DATABASE=openmrs
-      - DB_USERNAME=${OPENMRS_DB_USER}
-      - DB_PASSWORD=${OPENMRS_DB_PASSWORD}
+      - OPENMRS_DB_PORT=5432
+      - OPENMRS_URL=http://openmrs:8080
+      - ODOO_URL=http://odoo:8069
+      - ODOO_DATABASE=odoo
+      - ODOO_USER=${ODOO_USER}
+      - ODOO_PASSWORD=${ODOO_PASSWORD}
+      - OPENMRS_DB_HOST=mysql
+      - OPENMRS_DB_PORT=3306
+      - OPENMRS_DB_NAME=openmrs
+      - OPENMRS_DB_USER=${OPENMRS_DB_USER}
+      - OPENMRS_DB_PASSWORD=${OPENMRS_DB_PASSWORD}
+      - OPENMRS_USER=${OPENMRS_USER}
+      - OPENMRS_PASSWORD=${OPENMRS_PASSWORD}
+      - MYSQL_ADMIN_USER=root
+      - MYSQL_ADMIN_USER_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - SPRING_MNGT_USER=${EIP_SPRING_USER:-name}
+      - SPRING_MNGT_PASSWORD=${EIP_SPRING_PASSWORD:-password}
+      - EIP_DB_NAME=${EIP_DB_NAME}
+      - EIP_DB_USER=${EIP_DB_USER}
+      - EIP_DB_PASSWORD=${EIP_DB_PASSWORD}
+      - EIP_DB_HOST=mysql
+      - EIP_DB_PORT=3306
     networks:
       bahmni:
         aliases:
