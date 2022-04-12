@@ -341,6 +341,7 @@ services:
       - "${ODOO_EXTRA_ADDONS:-odoo-extra-addons}:/mnt/extra-addons"
       - "${ODOO_CONFIG_PATH:-odoo-config}:/mnt/odoo_config"
       - "${ODOO_CONFIG_CHECKSUM_PATH:-odoo-checksums}:/mnt/odoo_csv_checksum"
+      - "./properties/odoo:/etc/properties"
 
   eip-client:
     depends_on:
