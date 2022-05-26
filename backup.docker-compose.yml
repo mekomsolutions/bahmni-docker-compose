@@ -1,0 +1,84 @@
+version: "3.7"
+
+services:
+  odoo-db-backup:
+    image: mekomsolutions/postgres_backup:9556d7c
+    environment:
+      DB_HOST: odoo-postgresql
+      DB_NAME:  odoo
+      DB_USERNAME: ${ODOO_DB_USER}
+      DB_PASSWORD: ${ODOO_DB_PASSWORD}
+      DB_PORT: 5432
+    networks:
+      bahmni:
+        aliases:
+          - odoo-db-backup
+    volumes:
+      - "${BACKUP_PATH:-backup-path}:/opt/backup/"
+
+  openmrs-db-backup:
+    image: mekomsolutions/mysql_backup:9556d7c
+    environment:
+      DB_HOST: openmrs-mysql
+      DB_NAME:  openmrs
+      DB_USERNAME: ${OPENMRS_DB_USER}
+      DB_PASSWORD: ${OPENMRS_DB_PASSWORD}
+    networks:
+      bahmni:
+        aliases:
+          - openmrs-db-backup
+    volumes:
+      - "${BACKUP_PATH:-backup-path}:/opt/backup/"
+
+  openelis-db-backup:
+    image: mekomsolutions/postgres_backup:9556d7c
+    environment:
+      DB_HOST: postgresql
+      DB_NAME:  ${OPENELIS_DB_NAME}
+      DB_USERNAME: ${OPENELIS_DB_USER}
+      DB_PASSWORD: ${OPENELIS_DB_PASSWORD}
+      DB_PORT: 5432
+    networks:
+      bahmni:
+        aliases:
+          - openelis-db-backup
+    volumes:
+      - "${BACKUP_PATH:-backup-path}:/opt/backup/"
+
+  eip-client-backup:
+    image: mekomsolutions/mysql_backup:9556d7c
+    environment:
+      DB_HOST: mysql
+      DB_NAME:  ${EIP_DB_NAME}
+      DB_USERNAME: ${EIP_DB_USER}
+      DB_PASSWORD: ${EIP_DB_PASSWORD}
+    networks:
+      bahmni:
+        aliases:
+          - openmrs-db-backup
+    volumes:
+      - "${BACKUP_PATH:-backup-path}:/opt/backup/"
+
+  bahmni-home-backup:
+    image: mekomsolutions/filestore_backup:9556d7c
+    environment:
+      FILESTORE_PATH: /mnt/home
+    volumes:
+      - "${BACKUP_PATH:-backup-path}/bahmni_home:/opt/backup/"
+      - ${BAHMNI_HOME_PATH:-bahmni-home}:/mnt/home
+
+  odoo-filestore-backup:
+    image: mekomsolutions/filestore_backup:9556d7c
+    environment:
+      FILESTORE_PATH: /mnt/odoo
+    volumes:
+      - "${BACKUP_PATH:-backup-path}/odoo_filestore:/opt/backup/"
+      - ${ODOO_FILESTORE:-odoo-filestore}:/mnt/odoo
+
+volumes:
+  backup-path: ~
+  odoo-filestore: ~
+  bahmni-home: ~
+
+networks:
+  bahmni:
