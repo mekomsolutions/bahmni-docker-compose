@@ -4,6 +4,7 @@ services:
   proxy:
     image: mekomsolutions/proxy:bahmni_latest
     command: "httpd-foreground ${PROXY_TLS}"
+    restart: unless-stopped
     healthcheck:
       test:
         - CMD
@@ -27,6 +28,7 @@ services:
   # aka 'Bahmni EMR'
   bahmniapps:
     image: mekomsolutions/bahmniapps:bahmni_latest
+    restart: unless-stopped
     healthcheck:
       test:
         - CMD
@@ -44,6 +46,7 @@ services:
   # Implementer Interface: Front-end application to bring Bahmni Forms 2.0
   implementer-interface:
     image: mekomsolutions/implementer-interface:bahmni_latest
+    restart: unless-stopped
     healthcheck:
       test:
         - CMD
@@ -58,6 +61,7 @@ services:
 
   bahmni-home:
     image: mekomsolutions/httpd:bahmni_latest
+    restart: unless-stopped
     expose:
       - "8904"
     healthcheck:
@@ -80,6 +84,7 @@ services:
   # Appointments
   appointments:
     image: mekomsolutions/appointments:bahmni_latest
+    restart: unless-stopped
     healthcheck:
       test:
         - CMD
@@ -95,6 +100,7 @@ services:
   # Bahmni Config: Bahmni Apps configuration
   bahmni-config:
     image: httpd:2.4
+    restart: unless-stopped
     expose:
       - "8901"
     healthcheck:
@@ -115,6 +121,7 @@ services:
   # OpenMRS:
   openmrs:
     image: mekomsolutions/openmrs:bahmni_latest
+    restart: unless-stopped
     depends_on:
       - mysql
     environment:
@@ -161,6 +168,7 @@ services:
   # MySQL
   mysql:
     image: "mariadb:10.3"
+    restart: unless-stopped
     command: "mysqld --character-set-server=utf8 --collation-server=utf8_general_ci --log-bin --binlog-format=ROW  --server-id=2"
     environment:
       MYSQL_DATABASE: openmrs
@@ -183,6 +191,7 @@ services:
   # Bahmni Reports: Standalone Java app to provide Reporting capabilities
   bahmni-reports:
     image: mekomsolutions/bahmni-reports:bahmni_latest
+    restart: unless-stopped
     environment:
       # OpenMRS DB connection details
       OPENMRS_DB_HOSTNAME: mysql
@@ -229,6 +238,7 @@ services:
   # Bahmni Mart: Standalone JAVA app to schedule ETL tasks
   bahmni-mart:
     image: mekomsolutions/bahmni-mart:bahmni_latest
+    restart: unless-stopped
     environment:
       # OpenMRS DB connection details
       OPENMRS_DB_HOST: mysql
@@ -263,6 +273,7 @@ services:
   # Metabase: Reporting paltform
   metabase:
     image: mekomsolutions/metabase:bahmni_latest
+    restart: unless-stopped
     environment:
       MB_DB_TYPE: postgres
       MB_DB_PORT: 5432
@@ -284,6 +295,7 @@ services:
   # Postgreql: Database shared by multiple services
   postgresql:
     image: postgres:9.6-alpine
+    restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -325,6 +337,7 @@ services:
       postgresql:
         condition: service_healthy
     image: mekomsolutions/odoo
+    restart: unless-stopped
     environment:
       - HOST=odoo-postgresql
       - USER=${ODOO_DB_USER}
@@ -348,7 +361,7 @@ services:
       mysql:
         condition: service_started
     image: mekomsolutions/eip-client
-    restart: on-failure
+    restart: unless-stopped
     volumes:
       - "${EIP_CONFIG_PATH:-eip-client}/config:/config"
       - "${EIP_CONFIG_PATH:-eip-client}/routes:/routes"
@@ -389,6 +402,7 @@ services:
 
   openelis:
     image: mekomsolutions/openelis:bahmni_latest
+    restart: unless-stopped
     depends_on:
       - postgresql
     environment:
