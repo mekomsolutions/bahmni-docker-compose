@@ -212,8 +212,8 @@ services:
       REPORTS_DB_PASSWORD: ${REPORTS_DB_PASSWORD}
       # OpenMRS API credentials
       OPENMRS_HOSTNAME: openmrs
-      OPENMRS_USERNAME: ${OPENMRS_USER}
-      OPENMRS_PASSWORD: ${OPENMRS_PASSWORD}
+      OPENMRS_REPORTS_USER: ${OPENMRS_REPORTS_USER}
+      OPENMRS_REPORTS_PASSWORD: ${OPENMRS_REPORTS_PASSWORD}
       #
       BAHMNI_LOGIN_URL: "http://localhost/bahmni/home/index.html#/login"
       BAHMNI_CONFIG_URL: "http://bahmni-config:8901/"
