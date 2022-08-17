@@ -59,7 +59,7 @@ export OPENMRS_MODULES_PATH=$DISTRO_PATH/openmrs_modules && \
 export BAHMNI_APPS_PATH=$DISTRO_PATH/bahmni_emr/bahmniapps && \
 export ODOO_CONFIG_PATH=$DISTRO_PATH/odoo_config && \
 export ODOO_EXTRA_ADDONS=$DISTRO_PATH/odoo_addons && \
-export EIP_CONFIG_PATH=$DISTRO_PATH/eip_config && \
+export EIP_CONFIG_PATH=$DISTRO_PATH/eip_config
 ```
 
 The complete list of available variables can be found in [.env](.env).
@@ -151,10 +151,11 @@ To run a fresh system based on a production backup file (see [here](https://gith
   - OpenELIS : **clinlims.tar**
   - Odoo : **odoo.tar**
 2. Move PostgreSQL database files to [./sqls/postgresql/restore](./sqls/postgresql/restore) folder
-3. For OpenMRS database please folow the steps [here](#start-with-a-custom-mysql-dump)
+3. For OpenMRS database please follow the steps [here](#start-with-a-custom-mysql-dump)
 4. Unzip the **filestore.zip** file and set the variables in **.env** file as following:
+  Example for a K8s-made backup:
    - Odoo:
-     - `ODOO_FILESTORE=<filestore-path>/odoo`
+     - `ODOO_FILESTORE_PATH=<filestore-path>/odoo/filestore/odoo`
    - OpenMRS:
      - `OPENMRS_LUCENE_PATH=<filestore-path>/openmrs/lucene`
      - `OPENMRS_ACTIVEMQ_PATH=<filestore-path>/openmrs/activemq-data`
@@ -176,7 +177,7 @@ docker-compose [-p <project-name>] -f postgres_restore.yml up
 ```
 
 
-Now The restore is done, you can turn off postgresql by
+Now the restore is done, you can turn off postgresql by
 ```
 docker-compose [-p <project-name>] stop postgresql
 ```
