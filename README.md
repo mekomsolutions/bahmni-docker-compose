@@ -155,7 +155,7 @@ To run a fresh system based on a production backup file (see [here](https://gith
 4. Unzip the **filestore.zip** file and set the variables in **.env** file as following:
   Example for a K8s-made backup:
    - Odoo:
-     - `ODOO_FILESTORE_PATH=<filestore-path>/odoo/filestore/odoo`
+     - `ODOO_FILESTORE=<filestore-path>/odoo/filestore/odoo`
    - OpenMRS:
      - `OPENMRS_LUCENE_PATH=<filestore-path>/openmrs/lucene`
      - `OPENMRS_ACTIVEMQ_PATH=<filestore-path>/openmrs/activemq-data`
