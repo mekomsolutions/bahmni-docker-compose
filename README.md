@@ -284,3 +284,8 @@ The complete list of available variables can be found in [.env](.env).
   - Metabase
   - Odoo 14 (Odoo 10 supported on branch 1.x using Odoo Connect)
   - OpenELIS
+
+
+### Infrastructure model
+
+![Infrastructure model](.infragenie/infrastructure_model.png)
