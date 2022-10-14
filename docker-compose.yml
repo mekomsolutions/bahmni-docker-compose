@@ -164,6 +164,7 @@ services:
       - "${BAHMNI_HOME_PATH:-bahmni-home}:/home/bahmni/"
       - "${BAHMNI_OBSCALCULATOR_PATH:-bahmni-obscalculator}:/usr/local/tomcat/.OpenMRS/obscalculator/"
       - ./properties/openmrs/:/etc/properties/
+      - "${BAHMNI_IMAGE_PATH:-bahmni-images}:/home/bahmni/patient_images"
 
   # MySQL
   mysql:
@@ -449,5 +450,6 @@ volumes:
   eip-home: ~
   eip-client: ~
   odoo-checksums: ~
+  bahmni-images: ~
 networks:
   bahmni:
