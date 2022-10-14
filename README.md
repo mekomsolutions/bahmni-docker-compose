@@ -200,9 +200,11 @@ version: "3.7"
 
 services:
   odoo:
-    entrypoint: ["echo", "[ERROR] Service is disabled in docker-compose.override.yml file"]
+    profiles:
+      - "all"
   postgresql:
-    entrypoint: ["echo", "[ERROR] Service is disabled in docker-compose.override.yml file"]
+    profiles:
+      - "all"
 ```
 
 You can also of course comment the services directly in the [docker-compose.yml](./docker-compose.yml) file.
