@@ -201,10 +201,10 @@ version: "3.7"
 services:
   odoo:
     profiles:
-      - "all"
+      - "disabled"
   postgresql:
     profiles:
-      - "all"
+      - "disabled"
 ```
 
 You can also of course comment the services directly in the [docker-compose.yml](./docker-compose.yml) file.
