@@ -364,8 +364,8 @@ services:
     image: mekomsolutions/eip-client
     restart: unless-stopped
     volumes:
-      - "${EIP_CONFIG_PATH:-eip-client}/config:/config"
-      - "${EIP_CONFIG_PATH:-eip-client}/routes:/routes"
+      - "${EIP_CLIENT_CONFIG_PATH:-eip-client-config}:/config"
+      - "${EIP_CLIENT_ROUTES_PATH:-eip-client-routes}:/routes"
       - "${EIP_HOME_PATH:-eip-home}:/eip-home"
     environment:
       - MYSQL_DATABASE=openmrs
@@ -448,7 +448,8 @@ volumes:
   openmrs-active-mq: ~
   openmrs-lucene: ~
   eip-home: ~
-  eip-client: ~
+  eip-client-config: ~
+  eip-client-routes: ~
   odoo-checksums: ~
   bahmni-images: ~
 networks:
