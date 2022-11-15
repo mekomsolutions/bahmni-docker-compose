@@ -1,7 +1,17 @@
 version: "3.7"
 
 services:
+  init:
+    build: ./backup_init
+    environment:
+      BACKUP_FOLDER: ${BACKUP_FOLDER}
+    volumes:
+      - "${BACKUP_PATH:-backup-path}:/mnt"
+
   odoo-db-backup:
+    depends_on:
+      init:
+        condition: service_completed_successfully
     image: mekomsolutions/postgres_backup:9556d7c
     environment:
       DB_HOST: odoo-postgresql
@@ -14,9 +24,12 @@ services:
         aliases:
           - odoo-db-backup
     volumes:
-      - "${BACKUP_PATH:-backup-path}:/opt/backup/"
+      - "${BACKUP_PATH:-backup-path}/${BACKUP_FOLDER}:/opt/backup/"
 
   openmrs-db-backup:
+    depends_on:
+    init:
+      condition: service_completed_successfully
     image: mekomsolutions/mysql_backup:9556d7c
     environment:
       DB_HOST: openmrs-mysql
@@ -28,9 +41,12 @@ services:
         aliases:
           - openmrs-db-backup
     volumes:
-      - "${BACKUP_PATH:-backup-path}:/opt/backup/"
+      - "${BACKUP_PATH:-backup-path}/${BACKUP_FOLDER}:/opt/backup/"
 
   openelis-db-backup:
+    depends_on:
+      init:
+        condition: service_completed_successfully
     image: mekomsolutions/postgres_backup:9556d7c
     environment:
       DB_HOST: postgresql
@@ -43,9 +59,12 @@ services:
         aliases:
           - openelis-db-backup
     volumes:
-      - "${BACKUP_PATH:-backup-path}:/opt/backup/"
+      - "${BACKUP_PATH:-backup-path}/${BACKUP_FOLDER}:/opt/backup/"
 
   eip-client-backup:
+    depends_on:
+      init:
+        condition: service_completed_successfully
     image: mekomsolutions/mysql_backup:9556d7c
     environment:
       DB_HOST: mysql
@@ -57,29 +76,35 @@ services:
         aliases:
           - openmrs-db-backup
     volumes:
-      - "${BACKUP_PATH:-backup-path}:/opt/backup/"
+      - "${BACKUP_PATH:-backup-path}/${BACKUP_FOLDER}:/opt/backup/"
 
   bahmni-home-backup:
     image: mekomsolutions/filestore_backup:9556d7c
     environment:
       FILESTORE_PATH: /mnt/home
     volumes:
-      - "${BACKUP_PATH:-backup-path}/bahmni_home:/opt/backup/"
+      - "${BACKUP_PATH:-backup-path}/${BACKUP_FOLDER}/bahmni_home:/opt/backup/"
       - ${BAHMNI_HOME_PATH:-bahmni-home}:/mnt/home
 
   odoo-filestore-backup:
+    depends_on:
+      init:
+        condition: service_completed_successfully
     image: mekomsolutions/filestore_backup:9556d7c
     environment:
       FILESTORE_PATH: /mnt/odoo
     volumes:
-      - "${BACKUP_PATH:-backup-path}/odoo_filestore:/opt/backup/"
+      - "${BACKUP_PATH:-backup-path}/${BACKUP_FOLDER}/odoo_filestore:/opt/backup/"
       - ${ODOO_FILESTORE:-odoo-filestore}:/mnt/odoo
   odoo-checksum-backup:
+    depends_on:
+      init:
+        condition: service_completed_successfully
     image: mekomsolutions/filestore_backup:9556d7c
     environment:
       FILESTORE_PATH: /mnt/odoo_config_checksum
     volumes:
-      - "${BACKUP_PATH:-backup-path}/odoo_checksums:/opt/backup/"
+      - "${BACKUP_PATH:-backup-path}/${BACKUP_FOLDER}/odoo_checksums:/opt/backup/"
       - "${ODOO_CONFIG_CHECKSUM_PATH:-odoo-checksums}:/mnt/odoo_config_checksum"
 volumes:
   backup-path: ~
