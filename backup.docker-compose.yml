@@ -1,7 +1,7 @@
 version: "3.7"
 
 services:
-  init:
+  create-backup-folder:
     image: busybox:latest
     command: ["sh", "-c", "mkdir -p /mnt/$$BACKUP_FOLDER"]
     environment:
@@ -11,9 +11,9 @@ services:
 
   odoo-db-backup:
     depends_on:
-      init:
+      create-backup-folder:
         condition: service_completed_successfully
-    image: mekomsolutions/postgres_backup:9556d7c
+    image: mekomsolutions/postgres_backup:21eb8d5
     environment:
       DB_HOST: odoo-postgresql
       DB_NAME:  odoo
@@ -30,9 +30,9 @@ services:
 
   openmrs-db-backup:
     depends_on:
-      init:
+      create-backup-folder:
         condition: service_completed_successfully
-    image: mekomsolutions/mysql_backup:9556d7c
+    image: mekomsolutions/mysql_backup:21eb8d5
     environment:
       DB_HOST: openmrs-mysql
       DB_NAME:  openmrs
@@ -48,9 +48,9 @@ services:
 
   openelis-db-backup:
     depends_on:
-      init:
+      create-backup-folder:
         condition: service_completed_successfully
-    image: mekomsolutions/postgres_backup:9556d7c
+    image: mekomsolutions/postgres_backup:21eb8d5
     environment:
       DB_HOST: postgresql
       DB_NAME:  ${OPENELIS_DB_NAME}
@@ -67,9 +67,9 @@ services:
 
   eip-client-backup:
     depends_on:
-      init:
+      create-backup-folder:
         condition: service_completed_successfully
-    image: mekomsolutions/mysql_backup:9556d7c
+    image: mekomsolutions/mysql_backup:21eb8d5
     environment:
       DB_HOST: mysql
       DB_NAME:  ${EIP_DB_NAME}
@@ -85,9 +85,9 @@ services:
 
   bahmni-home-backup:
     depends_on:
-      init:
+      create-backup-folder:
         condition: service_completed_successfully
-    image: zouchine/filestore_backup:latest
+    image: mekomsolutions/filestore_backup:21eb8d5
     environment:
       FILESTORE_PATH: /mnt/home
       FILENAME: bahmni-home
@@ -98,9 +98,9 @@ services:
 
   odoo-filestore-backup:
     depends_on:
-      init:
+      create-backup-folder:
         condition: service_completed_successfully
-    image: zouchine/filestore_backup:latest
+    image: mekomsolutions/filestore_backup:21eb8d5
     environment:
       FILESTORE_PATH: /mnt/odoo
       BACKUP_PATH: "/opt/backup/${BACKUP_FOLDER}"
@@ -111,9 +111,9 @@ services:
 
   odoo-checksum-backup:
     depends_on:
-      init:
+      create-backup-folder:
         condition: service_completed_successfully
-    image: zouchine/filestore_backup:latest
+    image: mekomsolutions/filestore_backup:21eb8d5
     environment:
       FILESTORE_PATH: /mnt/odoo_config_checksum
       BACKUP_PATH: "/opt/backup/${BACKUP_FOLDER}"
