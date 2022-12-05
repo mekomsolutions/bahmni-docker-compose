@@ -96,6 +96,22 @@ services:
       bahmni:
         aliases:
           - appointments-1
+  senaite:
+    environment: 
+      - SITE=${SITE}
+      - ADMIN_USER=${ADMIN_USER}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    image: mekomsolutions/senaite:latest
+    volumes:
+    - ${SENAITE_CONFIG_PATH}/data:/data/importdata/senaite
+    - senaite-filestorage:/data/filestorage
+    - senaite-blobstorage:/data/blobstorage
+    ports:
+    - "8081:8080"
+    networks:
+      bahmni:
+        aliases:
+          - senaite
 
   # Bahmni Config: Bahmni Apps configuration
   bahmni-config:
@@ -368,34 +384,35 @@ services:
       - "${EIP_CLIENT_ROUTES_PATH:-eip-client-routes}:/routes"
       - "${EIP_HOME_PATH:-eip-home}:/eip-home"
     environment:
-      - MYSQL_DATABASE=openmrs
-      - MYSQL_USER=${OPENMRS_DB_USER}
-      - MYSQL_PASSWORD=${OPENMRS_DB_PASSWORD}
-      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - DB_HOST=mysql
-      - DB_DATABASE=openmrs
-      - OPENMRS_DB_PORT=5432
-      - OPENMRS_URL=http://openmrs:8080
-      - ODOO_URL=http://odoo:8069
-      - ODOO_DATABASE=odoo
-      - ODOO_USER=${ODOO_USER}
-      - ODOO_PASSWORD=${ODOO_PASSWORD}
-      - OPENMRS_DB_HOST=mysql
-      - OPENMRS_DB_PORT=3306
-      - OPENMRS_DB_NAME=openmrs
-      - OPENMRS_DB_USER=${OPENMRS_DB_USER}
-      - OPENMRS_DB_PASSWORD=${OPENMRS_DB_PASSWORD}
-      - OPENMRS_USER=${OPENMRS_USER}
-      - OPENMRS_PASSWORD=${OPENMRS_PASSWORD}
-      - MYSQL_ADMIN_USER=root
-      - MYSQL_ADMIN_USER_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - SPRING_MNGT_USER=${EIP_SPRING_USER:-name}
-      - SPRING_MNGT_PASSWORD=${EIP_SPRING_PASSWORD:-password}
+      - OAUTH_ENABLED=${OAUTH_ENABLED}
+      - OAUTH_CLIENT_SECRET=${OAUTH_CLIENT_SECRET}
+      - OAUTH_ACCESS_TOKEN_URI=${OAUTH_ACCESS_TOKEN_URI}
+      - OAUTH_CLIENT_ID=${OAUTH_CLIENT_ID}
       - EIP_DB_NAME=${EIP_DB_NAME}
       - EIP_DB_USER=${EIP_DB_USER}
       - EIP_DB_PASSWORD=${EIP_DB_PASSWORD}
-      - EIP_DB_HOST=mysql
-      - EIP_DB_PORT=3306
+      - OPENMRS_DB_HOST=${OPENMRS_DB_HOST}
+      - OPENMRS_DB_PORT=${OPENMRS_DB_PORT}
+      - OPENMRS_DB_NAME=${OPENMRS_DB_NAME}
+      - OPENMRS_DB_USER=${OPENMRS_DB_USER}
+      - OPENMRS_DB_PASSWORD=${OPENMRS_DB_PASSWORD}
+      - OPENMRS_USER=${OPENMRS_USER}
+      - SENAITE_USERNAME=${ADMIN_USER}
+      - SENAITE_PASSWORD=${ADMIN_PASSWORD}
+      - OPENMRS_PASSWORD=${OPENMRS_PASSWORD}
+      - MYSQL_ADMIN_USER=root
+      - MYSQL_ADMIN_USER_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - ODOO_DATABASE=${ODOO_DATABASE}
+      - ODOO_USER=${ODOO_USER}
+      - ODOO_PASSWORD=${ODOO_PASSWORD}
+      - RESULTS_ENCOUNTER_TYPE_UUID=${RESULTS_ENCOUNTER_TYPE_UUID}
+      - CONCEPT_COMPLEX_UUID=${CONCEPT_COMPLEX_UUID}
+      - OPENMRS_IDENTIFIER_TYPE_UUD=${OPENMRS_IDENTIFIER_TYPE_UUD}
+      - DB_EVENT_DESTINATIONS=${DB_EVENT_DESTINATIONS}
+      - CREATE_CUSTOMER_IF_NOT_EXIST=${CREATE_CUSTOMER_IF_NOT_EXIST}
+      - SENAITE_URL=http://senaite:8080
+      - OPENMRS_URL=http://openmrs:8080
+      - ODOO_URL=http://odoo:8069
     networks:
       bahmni:
         aliases:
@@ -452,5 +469,7 @@ volumes:
   eip-client-routes: ~
   odoo-checksums: ~
   bahmni-images: ~
+  senaite-filestorage: ~
+  senaite-blobstorage: ~
 networks:
   bahmni:
