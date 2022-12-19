@@ -187,6 +187,16 @@ or simply start Bahmni as described [here](#start-bahmni)
 
 To start OpenMRS with your own database, just drop your data file (`.sql` or `.sql.gz`) in the [./sqls/mysql/](./sqls/mysql/) folder and recreate your volumes (`docker-compose -v down`).
 
+### Backup databases and filestores
+
+To get the backup of services:
+
+```
+export BACKUP_PATH=<path/to/backup>
+# Run the backup
+export BACKUP_FOLDER=`date +%F-%R` && docker-compose [-p <project-name>] -f backup.docker-compose.yml up
+```
+
 ### Disable individual services
 If you are developing, you may not want to run the complete Bahmni suite.
 You can disable services by adding **docker-compose.override.yml** file at the project root with the following contents:
