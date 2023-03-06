@@ -97,7 +97,7 @@ sudo -E docker compose -p $DISTRO_GROUP up
 <img src="./readme/docker-compose-up-shadow.png" alt="docker-compose up" height="200">
 </p>
 
-**Important:** This assumes that you run the `docker` command as the same user and in the same window in which you exported your variables. On Linux we advise to run `docker` with `sudo -E` option to preserve the user environment as `su`. See [Docker on Linux Post-install steps](https://docs.docker.com/engine/install/linux-postinstall/)
+**Important:** This assumes that you run the `docker` command as the same user and in the same window in which you exported your variables. On Linux we advise to run `docker` with `sudo -E` option to preserve the user environment. See [Docker on Linux Post-install steps](https://docs.docker.com/engine/install/linux-postinstall/)
 
 ### Access the servers:
 
