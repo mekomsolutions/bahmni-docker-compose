@@ -8,6 +8,14 @@ Docker Compose project to run Bahmni.
   <img src="./readme/vertical-logo-monochromatic.png" alt="Docker Logo" height="150">
   </p>
 
+### Run Ozone FOSS locally
+
+#### Prerequisites
+Install Git, Maven and Docker Compose
+
+#### For Linux OS
+Create the docker group and add your user to it. Checkout the guide [here](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user).
+
 ## Quick Start
 
 ### Create your working directory:
@@ -19,7 +27,7 @@ cd ~/
 Then create the working directory and save the path:
 ```
 export BAHMNI_DIR=$PWD/bahmni && \
-mkdir $BAHMNI_DIR
+mkdir $BAHMNI_DIR && cd $BAHMNI_DIR
 ```
 
 ### Download the Docker Compose project itself:
@@ -64,40 +72,17 @@ export EIP_CONFIG_PATH=$DISTRO_PATH/eip_config
 
 The complete list of available variables can be found in [.env](.env).
 
-### Move to the location of bahmni-docker-compose project
-
-```bash
-cd $BAHMNI_DIR/bahmni-docker-compose-$VERSION
-```
-
 ### Start Bahmni:
-
-<table>
-<tr>
-<td> macOS </td> <td> Linux </td>
-</tr>
-<tr>
-<td>
 
 ```bash
 docker compose -p $DISTRO_GROUP up
 ```
 
-</td>
-<td>
-
-```bash
-sudo -E docker compose -p $DISTRO_GROUP up
-```
-</td>
-</tr>
-</table>
-
 <p align="center">
 <img src="./readme/docker-compose-up-shadow.png" alt="docker-compose up" height="200">
 </p>
 
-**Important:** This assumes that you run the `docker` command as the same user and in the same window in which you exported your variables. On Linux we advise to run `docker` with `sudo -E` option to preserve the user environment. See [Docker on Linux Post-install steps](https://docs.docker.com/engine/install/linux-postinstall/)
+**Important:** This assumes that you run the `docker` command as the same user and in the same window in which you exported your variables. If Docker is run as `sudo`, the variables won't have an effect. Make sure to either export them as root, or run `docker` with `sudo -E` option to preserve the user environment
 
 ### Access the servers:
 
@@ -262,7 +247,7 @@ watch rsync -av ~/repos/openmrs-module-bahmniapps/ui/ /tmp/bahmni-distro-haiti/b
 
 ### Debug the Java apps
 
-The Java apps (OpenMRS, Bahmni Reports, Odoo Connect...) can be remote debugged very simply by setting a the `DEBUG: "true"` environment variable to the service.
+The Java apps (OpenMRS, Bahmni Reports, Odoo Connect...) can be remote debugged very simply by setting a `DEBUG: "true"` environment variable to the service.
 
 Don't forget to open the port `8000` on the service as well:
 Eg:
