@@ -8,7 +8,48 @@ services:
       BACKUP_FOLDER: ${BACKUP_FOLDER}
     volumes:
       - "${BACKUP_PATH:-backup-path}:/mnt"
+  #
+  # MySQL backups
+  #
+  openmrs-db-backup:
+    image: mekomsolutions/mysql_backup:21eb8d5
+    depends_on:
+      create-backup-folder:
+        condition: service_completed_successfully
+    environment:
+      DB_HOST: openmrs-mysql
+      DB_NAME: openmrs
+      DB_USERNAME: ${OPENMRS_DB_USER}
+      DB_PASSWORD: ${OPENMRS_DB_PASSWORD}
+      BACKUP_PATH: "/opt/backup/${BACKUP_FOLDER}"
+    networks:
+      bahmni:
+        aliases:
+          - openmrs-db-backup
+    volumes:
+      - "${BACKUP_PATH:-backup-path}:/opt/backup/"
 
+  eip-client-backup:
+    image: mekomsolutions/mysql_backup:21eb8d5
+    depends_on:
+      create-backup-folder:
+        condition: service_completed_successfully
+    environment:
+      DB_HOST: mysql
+      DB_NAME: ${EIP_DB_NAME}
+      DB_USERNAME: ${EIP_DB_USER}
+      DB_PASSWORD: ${EIP_DB_PASSWORD}
+      BACKUP_PATH: "/opt/backup/${BACKUP_FOLDER}"
+    networks:
+      bahmni:
+        aliases:
+          - openmrs-db-backup
+    volumes:
+      - "${BACKUP_PATH:-backup-path}:/opt/backup/"
+
+  #
+  # PostgreSQL backpus
+  #
   odoo-db-backup:
     depends_on:
       create-backup-folder:
@@ -16,7 +57,7 @@ services:
     image: mekomsolutions/postgres_backup:21eb8d5
     environment:
       DB_HOST: odoo-postgresql
-      DB_NAME:  odoo
+      DB_NAME: odoo
       DB_USERNAME: ${ODOO_DB_USER}
       DB_PASSWORD: ${ODOO_DB_PASSWORD}
       DB_PORT: 5432
@@ -28,24 +69,6 @@ services:
     volumes:
       - "${BACKUP_PATH:-backup-path}:/opt/backup/"
 
-  openmrs-db-backup:
-    depends_on:
-      create-backup-folder:
-        condition: service_completed_successfully
-    image: mekomsolutions/mysql_backup:21eb8d5
-    environment:
-      DB_HOST: openmrs-mysql
-      DB_NAME:  openmrs
-      DB_USERNAME: ${OPENMRS_DB_USER}
-      DB_PASSWORD: ${OPENMRS_DB_PASSWORD}
-      BACKUP_PATH: "/opt/backup/${BACKUP_FOLDER}"
-    networks:
-      bahmni:
-        aliases:
-          - openmrs-db-backup
-    volumes:
-      - "${BACKUP_PATH:-backup-path}:/opt/backup/"
-
   openelis-db-backup:
     depends_on:
       create-backup-folder:
@@ -53,7 +76,7 @@ services:
     image: mekomsolutions/postgres_backup:21eb8d5
     environment:
       DB_HOST: postgresql
-      DB_NAME:  ${OPENELIS_DB_NAME}
+      DB_NAME: ${OPENELIS_DB_NAME}
       DB_USERNAME: ${OPENELIS_DB_USER}
       DB_PASSWORD: ${OPENELIS_DB_PASSWORD}
       DB_PORT: 5432
@@ -65,24 +88,9 @@ services:
     volumes:
       - "${BACKUP_PATH:-backup-path}:/opt/backup/"
 
-  eip-client-backup:
-    depends_on:
-      create-backup-folder:
-        condition: service_completed_successfully
-    image: mekomsolutions/mysql_backup:21eb8d5
-    environment:
-      DB_HOST: mysql
-      DB_NAME:  ${EIP_DB_NAME}
-      DB_USERNAME: ${EIP_DB_USER}
-      DB_PASSWORD: ${EIP_DB_PASSWORD}
-      BACKUP_PATH: "/opt/backup/${BACKUP_FOLDER}"
-    networks:
-      bahmni:
-        aliases:
-          - openmrs-db-backup
-    volumes:
-      - "${BACKUP_PATH:-backup-path}:/opt/backup/"
-
+  #
+  # Filestore backups
+  #
   bahmni-home-backup:
     depends_on:
       create-backup-folder:
@@ -121,11 +129,26 @@ services:
     volumes:
       - "${BACKUP_PATH:-backup-path}:/opt/backup/"
       - "${ODOO_CONFIG_CHECKSUM_PATH:-odoo-checksums}:/mnt/odoo_config_checksum"
+
+  openmrs-checksum-backup:
+    image: mekomsolutions/filestore_backup:21eb8d5
+    depends_on:
+      create-backup-folder:
+        condition: service_completed_successfully
+    environment:
+      FILESTORE_PATH: /mnt/openmrs_config_checksum
+      BACKUP_PATH: "/opt/backup/${BACKUP_FOLDER}"
+      FILENAME: openmrs-checksum
+    volumes:
+      - "${BACKUP_PATH:-backup-path}:/opt/backup/"
+      - "${OPENMRS_CONFIG_CHECKSUM_PATH:-openmrs-config-checksums}:/mnt/openmrs_config_checksum"
+
 volumes:
   backup-path: ~
   odoo-filestore: ~
   bahmni-home: ~
   odoo-checksums: ~
+  openmrs-config-checksums: ~
 
 networks:
   bahmni:
