@@ -2,7 +2,7 @@ version: "3.7"
 services:
   # Apache HTTPD: Entry point for the application.
   proxy:
-    image: mekomsolutions/proxy:bahmni_latest
+    image: mekomsolutions/proxy:69f1dce
     command: "httpd-foreground ${PROXY_TLS}"
     restart: unless-stopped
     healthcheck:
@@ -27,7 +27,7 @@ services:
   # Bahmni Apps: The main front-end component
   # aka 'Bahmni EMR'
   bahmniapps:
-    image: mekomsolutions/bahmniapps:bahmni_latest
+    image: mekomsolutions/bahmniapps:69f1dce
     restart: unless-stopped
     healthcheck:
       test:
@@ -45,7 +45,7 @@ services:
 
   # Implementer Interface: Front-end application to bring Bahmni Forms 2.0
   implementer-interface:
-    image: mekomsolutions/implementer-interface:bahmni_latest
+    image: mekomsolutions/implementer-interface:69f1dce
     restart: unless-stopped
     healthcheck:
       test:
@@ -60,7 +60,7 @@ services:
           - implementer-interface
 
   bahmni-home:
-    image: mekomsolutions/httpd:bahmni_latest
+    image: mekomsolutions/httpd:69f1dce
     restart: unless-stopped
     expose:
       - "8904"
@@ -83,7 +83,7 @@ services:
 
   # Appointments
   appointments:
-    image: mekomsolutions/appointments:bahmni_latest
+    image: mekomsolutions/appointments:82b6948
     restart: unless-stopped
     healthcheck:
       test:
@@ -120,7 +120,7 @@ services:
 
   # OpenMRS:
   openmrs:
-    image: mekomsolutions/openmrs:bahmni_latest
+    image: mekomsolutions/openmrs:69f1dce
     restart: unless-stopped
     depends_on:
       - mysql
@@ -191,7 +191,7 @@ services:
 
   # Bahmni Reports: Standalone Java app to provide Reporting capabilities
   bahmni-reports:
-    image: mekomsolutions/bahmni-reports:bahmni_latest
+    image: mekomsolutions/bahmni-reports:69f1dce
     restart: unless-stopped
     environment:
       # OpenMRS DB connection details
@@ -238,7 +238,7 @@ services:
 
   # Bahmni Mart: Standalone JAVA app to schedule ETL tasks
   bahmni-mart:
-    image: mekomsolutions/bahmni-mart:bahmni_latest
+    image: mekomsolutions/bahmni-mart:69f1dce
     restart: unless-stopped
     environment:
       # OpenMRS DB connection details
@@ -273,7 +273,7 @@ services:
 
   # Metabase: Reporting paltform
   metabase:
-    image: mekomsolutions/metabase:bahmni_latest
+    image: mekomsolutions/metabase:69f1dce
     restart: unless-stopped
     environment:
       MB_DB_TYPE: postgres
@@ -337,7 +337,7 @@ services:
     depends_on:
       postgresql:
         condition: service_healthy
-    image: mekomsolutions/odoo
+    image: mekomsolutions/odoo:2c1706f
     restart: unless-stopped
     environment:
       - HOST=odoo-postgresql
@@ -361,7 +361,7 @@ services:
     depends_on:
       mysql:
         condition: service_started
-    image: mekomsolutions/eip-client
+    image: mekomsolutions/eip-client:sha-ed1c20e
     restart: unless-stopped
     volumes:
       - "${EIP_CLIENT_CONFIG_PATH:-eip-client-config}:/config"
@@ -411,7 +411,7 @@ services:
           - eip-client
 
   openelis:
-    image: mekomsolutions/openelis:bahmni_latest
+    image: mekomsolutions/openelis:69f1dce
     restart: unless-stopped
     depends_on:
       - postgresql
