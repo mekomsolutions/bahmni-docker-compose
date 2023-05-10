@@ -81,12 +81,22 @@
 
   <repositories>
     <repository>
-      <id>mks-nexus-public</id>
+      <id>mks-nexus</id>
       <url>https://nexus.mekomsolutions.net/repository/maven-public/</url>
-      <snapshots>
-        <updatePolicy>always</updatePolicy>
-      </snapshots>
     </repository>
   </repositories>
+
+  <distributionManagement>
+    <repository>
+      <name>Mekom Solutions Nexus repo</name>
+      <id>mks-nexus</id>
+      <url>https://nexus.mekomsolutions.net/repository/maven-public/</url>
+    </repository>
+    <snapshotRepository>
+      <name>Mekom Solutions Nexus repo for snapshots</name>
+      <id>mks-nexus-snapshots</id>
+      <url>https://nexus.mekomsolutions.net/repository/maven-snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
 
 </project>
