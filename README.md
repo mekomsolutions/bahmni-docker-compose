@@ -59,7 +59,8 @@ export OPENMRS_MODULES_PATH=$DISTRO_PATH/openmrs_modules && \
 export BAHMNI_APPS_PATH=$DISTRO_PATH/bahmni_emr/bahmniapps && \
 export ODOO_CONFIG_PATH=$DISTRO_PATH/odoo_config && \
 export ODOO_EXTRA_ADDONS=$DISTRO_PATH/odoo_addons && \
-export EIP_CONFIG_PATH=$DISTRO_PATH/eip_config
+export EIP_CLIENT_ROUTES_PATH=$DISTRO_PATH/eip_config/routes && \
+export EIP_CONFIG_PATH=$DISTRO_PATH/eip_config/config 
 ```
 
 The complete list of available variables can be found in [.env](.env).
@@ -195,6 +196,28 @@ To get the backup of services:
 export BACKUP_PATH=<path/to/backup>
 # Run the backup
 export BACKUP_FOLDER=`date +%F-%R` && docker-compose [-p <project-name>] -f backup.docker-compose.yml up
+```
+
+### Upload and Download backups from S3 
+
+```
+export AWS_ACCESS_KEY_ID=aws_secret_key_id && \
+export AWS_SECRET_ACCESS_KEY=aws_access_key && \
+export S3_PATH=s3://exampe-backup/ && \
+export CRON_SCHEDULE=*/5 * * * * && \
+export UPLOAD_TARGET_DIR=<backup directory> && \
+export DOWNLOAD_TARGET_DIR=<directory to download to>
+```
+#### Scheduled upload
+
+```
+docker-compose -f s3-sync-docker-compose.yml up upload-backup -d
+```
+
+#### Scheduled Download
+
+```
+docker-compose -f s3-sync-docker-compose.yml up download-backup -d
 ```
 
 ### Disable individual services
