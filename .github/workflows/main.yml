@@ -23,13 +23,13 @@ jobs:
           servers: |
             [{
               "id": "mks-nexus",
-              "username": "${{ secrets.MEKOM_NEXUS_USERNAME }}",
-              "password": "${{ secrets.MEKOM_NEXUS_PASSWORD }}"
+              "username": "${{ secrets.NEXUS_USERNAME }}",
+              "password": "${{ secrets.NEXUS_PASSWORD }}"
             },
             {
               "id": "mks-nexus-snapshots",
-              "username": "${{ secrets.MEKOM_NEXUS_USERNAME }}",
-              "password": "${{ secrets.MEKOM_NEXUS_PASSWORD }}"
+              "username": "${{ secrets.NEXUS_USERNAME }}",
+              "password": "${{ secrets.NEXUS_PASSWORD }}"
             }]
         if: ${{ github.ref == 'refs/heads/main' }}
 
