@@ -1,2 +1,3 @@
 tasks:
   - init: docker-compose pull
+  - command: mvn clean package
