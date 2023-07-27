@@ -82,7 +82,7 @@
   <repositories>
     <repository>
       <id>mks-nexus</id>
-      <url>https://nexus.mekomsolutions.net/repository/maven-public/</url>
+      <url>https://nexus.mekomsolutions.net/repository/maven-public</url>
     </repository>
   </repositories>
 
@@ -90,7 +90,7 @@
     <repository>
       <name>Mekom Solutions Nexus repo</name>
       <id>mks-nexus</id>
-      <url>https://nexus.mekomsolutions.net/repository/maven-public/</url>
+      <url>https://nexus.mekomsolutions.net/repository/maven-releases</url>
     </repository>
     <snapshotRepository>
       <name>Mekom Solutions Nexus repo for snapshots</name>
