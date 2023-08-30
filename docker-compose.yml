@@ -99,7 +99,7 @@ services:
 
   # Bahmni Config: Bahmni Apps configuration
   bahmni-config:
-    image: httpd:2.4
+    image: httpd:2.4-bullseye
     restart: unless-stopped
     expose:
       - "8901"
