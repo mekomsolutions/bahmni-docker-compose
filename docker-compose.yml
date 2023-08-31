@@ -125,7 +125,7 @@ services:
     depends_on:
       - mysql
     environment:
-      JAVA_OPTS: ${JAVA_OPTS}
+      OPENMRS_JAVA_OPTS: ${OPENMRS_JAVA_OPTS}
       OPENELIS_HOST: openelis
       OPENELIS_ATOMFEED_USER: ${OPENELIS_ATOMFEED_USER}
       OPENELIS_ATOMFEED_PASSWORD: ${OPENELIS_ATOMFEED_PASSWORD}
@@ -373,7 +373,7 @@ services:
       - "${EIP_CONFIG_PATH}/routes:/routes"
       - "${EIP_HOME_PATH:-eip-home}:/eip-home"
     environment:
-      - JAVA_OPTS=${JAVA_OPTS}
+      - EIP_JAVA_OPTS=${EIP_JAVA_OPTS}
       - MYSQL_DATABASE=openmrs
       - MYSQL_USER=${OPENMRS_DB_USER}
       - MYSQL_PASSWORD=${OPENMRS_DB_PASSWORD}
