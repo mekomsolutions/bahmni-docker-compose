@@ -187,7 +187,7 @@ services:
         aliases:
           - openmrs-mysql
     ports:
-      - "3306:3306"
+      - "${MYSQL_PUBLIC_PORT:-3306}:3306"
     volumes:
       - "${MYSQL_DATADIR:-mysql-data}:/var/lib/mysql"
       - "${SQL_SCRIPTS_PATH:-./sqls}/mysql:/docker-entrypoint-initdb.d"
@@ -332,7 +332,7 @@ services:
           - bahmni-mart-postgresql
           - bahmni-mart-db
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PUBLIC_PORT:-5432}:5432"
     volumes:
       - ${POSTGRES_DATADIR:-postgresql-data}:/var/lib/postgresql/data
       - "${SQL_SCRIPTS_PATH:-./sqls}/postgresql:/docker-entrypoint-initdb.d"
