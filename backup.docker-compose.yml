@@ -12,7 +12,7 @@ services:
   # MySQL backups
   #
   openmrs-db-backup:
-    image: mekomsolutions/mysql_backup:48d0823
+    image: mekomsolutions/mysql_backup:a087235
     depends_on:
       create-backup-folder:
         condition: service_completed_successfully
@@ -30,7 +30,7 @@ services:
       - "${BACKUP_PATH:-backup-path}:/opt/backup/"
 
   eip-client-backup:
-    image: mekomsolutions/mysql_backup:48d0823
+    image: mekomsolutions/mysql_backup:a087235
     depends_on:
       create-backup-folder:
         condition: service_completed_successfully
@@ -54,7 +54,7 @@ services:
     depends_on:
       create-backup-folder:
         condition: service_completed_successfully
-    image: mekomsolutions/postgres_backup:48d0823
+    image: mekomsolutions/postgres_backup:a087235
     environment:
       DB_HOST: odoo-postgresql
       DB_NAME: odoo
@@ -73,7 +73,7 @@ services:
     depends_on:
       create-backup-folder:
         condition: service_completed_successfully
-    image: mekomsolutions/postgres_backup:48d0823
+    image: mekomsolutions/postgres_backup:a087235
     environment:
       DB_HOST: postgresql
       DB_NAME: ${OPENELIS_DB_NAME}
@@ -95,7 +95,7 @@ services:
     depends_on:
       create-backup-folder:
         condition: service_completed_successfully
-    image: mekomsolutions/filestore_backup:48d0823
+    image: mekomsolutions/filestore_backup:a087235
     environment:
       FILESTORE_PATH: /mnt/home
       FILENAME: bahmni-home
@@ -108,7 +108,7 @@ services:
     depends_on:
       create-backup-folder:
         condition: service_completed_successfully
-    image: mekomsolutions/filestore_backup:48d0823
+    image: mekomsolutions/filestore_backup:a087235
     environment:
       FILESTORE_PATH: /mnt/odoo
       BACKUP_PATH: "/opt/backup/${BACKUP_FOLDER}"
@@ -121,7 +121,7 @@ services:
     depends_on:
       create-backup-folder:
         condition: service_completed_successfully
-    image: mekomsolutions/filestore_backup:48d0823
+    image: mekomsolutions/filestore_backup:a087235
     environment:
       FILESTORE_PATH: /mnt/odoo_config_checksum
       BACKUP_PATH: "/opt/backup/${BACKUP_FOLDER}"
@@ -131,7 +131,7 @@ services:
       - "${ODOO_CONFIG_CHECKSUM_PATH:-odoo-checksums}:/mnt/odoo_config_checksum"
 
   openmrs-checksum-backup:
-    image: mekomsolutions/filestore_backup:48d0823
+    image: mekomsolutions/filestore_backup:a087235
     depends_on:
       create-backup-folder:
         condition: service_completed_successfully

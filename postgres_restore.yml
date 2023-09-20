@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   pg_restore:
-    image: mekomsolutions/postgres_backup
+    image: mekomsolutions/postgres_backup:a087235
     entrypoint: "./opt/restore/restore.sh"
     environment:
       POSTGRES_DB: postgres
