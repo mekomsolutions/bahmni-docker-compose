@@ -8,6 +8,14 @@ Docker Compose project to run Bahmni.
   <img src="./readme/vertical-logo-monochromatic.png" alt="Docker Logo" height="150">
   </p>
 
+### Run Ozone FOSS locally
+
+#### Prerequisites
+Install Git, Maven and Docker Compose
+
+#### For Linux OS
+Create the docker group and add your user to it. Checkout the guide [here](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user).
+
 ## Quick Start
 
 ### Create your working directory:
@@ -19,13 +27,13 @@ cd ~/
 Then create the working directory and save the path:
 ```
 export BAHMNI_DIR=$PWD/bahmni && \
-mkdir $BAHMNI_DIR
+mkdir $BAHMNI_DIR && cd $BAHMNI_DIR
 ```
 
 ### Download the Docker Compose project itself:
 
 ```
-export VERSION=2.0.0-SNAPSHOT && \
+export VERSION=2.4.0-SNAPSHOT && \
 # Download the project && \
 mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -Dtransitive=false --legacy-local-repository && \
 # Unzip the project in $BAHMNI_DIR/bahmni-docker-compose-$VERSION && \
@@ -41,7 +49,7 @@ Fetch the distribution of your choice:
 Eg, Bahmni Distro **Haiti**:
 ```
 export DISTRO_GROUP="haiti" && \
-export DISTRO_VERSION="1.2.0-SNAPSHOT" && \
+export DISTRO_VERSION="2.4.0" && \
 # Download the distro && \
 mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-distro-$DISTRO_GROUP:$DISTRO_VERSION:zip -Dtransitive=false --legacy-local-repository && \
 # Unzip the distro in $BAHMNI_DIR/bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION && \
@@ -67,16 +75,15 @@ The complete list of available variables can be found in [.env](.env).
 
 ### Start Bahmni:
 
+```bash
+docker compose -p $DISTRO_GROUP up
 ```
-cd $BAHMNI_DIR/bahmni-docker-compose-$VERSION && \
-docker-compose -p $DISTRO_GROUP up
-```
+
 <p align="center">
 <img src="./readme/docker-compose-up-shadow.png" alt="docker-compose up" height="200">
 </p>
 
-**Important:** This assumes that you run the `docker` command as the same user and in the same window in which you exported your variables.
-If Docker is run as `sudo`, the variables won't have an effect. Make sure to either export them as root, or run `docker` with `sudo -E` option to preserve the user environment. See [Docker on Linux Post-install steps](https://docs.docker.com/engine/install/linux-postinstall/)
+**Important:** This assumes that you run the `docker` command as the same user and in the same window in which you exported your variables. If Docker is run as `sudo`, the variables won't have an effect. Make sure to either export them as root, or run `docker` with `sudo -E` option to preserve the user environment
 
 ### Access the servers:
 
@@ -263,7 +270,7 @@ watch rsync -av ~/repos/openmrs-module-bahmniapps/ui/ /tmp/bahmni-distro-haiti/b
 
 ### Debug the Java apps
 
-The Java apps (OpenMRS, Bahmni Reports, Odoo Connect...) can be remote debugged very simply by setting a the `DEBUG: "true"` environment variable to the service.
+The Java apps (OpenMRS, Bahmni Reports, Odoo Connect...) can be remote debugged very simply by setting a `DEBUG: "true"` environment variable to the service.
 
 Don't forget to open the port `8000` on the service as well:
 Eg:
