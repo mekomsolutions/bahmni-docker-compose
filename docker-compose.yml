@@ -325,6 +325,7 @@ services:
       OPENELIS_DB_USER: ${OPENELIS_DB_USER}
       OPENELIS_DB_PASSWORD: ${OPENELIS_DB_PASSWORD}
       OPENELIS_DB_NAME: ${OPENELIS_DB_NAME}
+    command: postgres -c wal_level=logical -c max_wal_senders=10 -c max_replication_slots=10 -c max_connections=200
     networks:
       bahmni:
         aliases:
