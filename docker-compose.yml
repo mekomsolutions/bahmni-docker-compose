@@ -298,7 +298,7 @@ services:
 
   # Postgreql: Database shared by multiple services
   postgresql:
-    image: postgres:9.6-alpine
+    image: postgres:13-alpine
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
