@@ -60,7 +60,7 @@ export BAHMNI_APPS_PATH=$DISTRO_PATH/bahmni_emr/bahmniapps && \
 export ODOO_CONFIG_PATH=$DISTRO_PATH/odoo_config && \
 export ODOO_EXTRA_ADDONS=$DISTRO_PATH/odoo_addons && \
 export EIP_CLIENT_ROUTES_PATH=$DISTRO_PATH/eip_config/routes && \
-export EIP_CONFIG_PATH=$DISTRO_PATH/eip_config/config 
+export EIP_CONFIG_PATH=$DISTRO_PATH/eip_config
 ```
 
 The complete list of available variables can be found in [.env](.env).
