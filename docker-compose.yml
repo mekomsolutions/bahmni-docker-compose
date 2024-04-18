@@ -298,6 +298,7 @@ services:
 
   # Postgreql: Database shared by multiple services
   postgresql:
+    command: "postgres -c wal_level=logical -c max_wal_senders=10 -c max_replication_slots=10"
     image: postgres:13-alpine
     restart: unless-stopped
     healthcheck:
