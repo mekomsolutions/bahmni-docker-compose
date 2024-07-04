@@ -41,7 +41,7 @@ Fetch the distribution of your choice:
 Eg, Bahmni Distro **Haiti**:
 ```
 export DISTRO_GROUP="haiti" && \
-export DISTRO_VERSION="1.2.0-SNAPSHOT" && \
+export DISTRO_VERSION="2.7.0" && \
 # Download the distro && \
 mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-distro-$DISTRO_GROUP:$DISTRO_VERSION:zip -Dtransitive=false --legacy-local-repository && \
 # Unzip the distro in $BAHMNI_DIR/bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION && \
