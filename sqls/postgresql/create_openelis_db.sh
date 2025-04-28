@@ -8,7 +8,7 @@ function create_user_and_database() {
 	local password=$3
 	echo "  Creating 'OpenELIS' user and database..."
 	psql -v ON_ERROR_STOP=1 --username postgres postgres <<-EOSQL
-	    CREATE USER $user WITH PASSWORD '$password';
+	    CREATE USER $user WITH UNENCRYPTED PASSWORD '$password';
 	    CREATE DATABASE $database;
 	    GRANT ALL PRIVILEGES ON DATABASE $database TO $user;
 EOSQL
