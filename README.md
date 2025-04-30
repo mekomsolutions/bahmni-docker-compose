@@ -12,65 +12,48 @@ Docker Compose project to run Bahmni.
 
 ### Create your working directory:
 
-Move to the location of your choice, eg, your home folder:
+First clone any bahmni distro
+Eg.
 ```
-cd ~/
-```
-Then create the working directory and save the path:
-```
-export BAHMNI_DIR=$PWD/bahmni && \
-mkdir $BAHMNI_DIR
+git clone https://github.com/mekomsolutions/bahmni-distro-c2c
 ```
 
-### Download the Docker Compose project itself:
-
+Build the distro
 ```
-export VERSION=2.9.0-SNAPSHOT && \
-# Download the project && \
-mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -Dtransitive=false --legacy-local-repository && \
-# Unzip the project in $BAHMNI_DIR/bahmni-docker-compose-$VERSION && \
-mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:unpack -Dproject.basedir=$BAHMNI_DIR -Dartifact=net.mekomsolutions:bahmni-docker-compose:$VERSION:zip -DoutputDirectory=$BAHMNI_DIR/bahmni-docker-compose-$VERSION
+mvn clean install
 ```
 
-### Download the Bahmni distribution of your choice:
+Now clone bahmni-docker-compose repo
 
-The Docker images do not provide a default Bahmni distribution so you need to first fetch one.
-
-Fetch the distribution of your choice:
-
-Eg, Bahmni Distro **Haiti**:
 ```
-export DISTRO_GROUP="haiti" && \
-export DISTRO_VERSION="2.7.0" && \
-# Download the distro && \
-mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:get -DremoteRepositories=https://nexus.mekomsolutions.net/repository/maven-public -Dartifact=net.mekomsolutions:bahmni-distro-$DISTRO_GROUP:$DISTRO_VERSION:zip -Dtransitive=false --legacy-local-repository && \
-# Unzip the distro in $BAHMNI_DIR/bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION && \
-mvn org.apache.maven.plugins:maven-dependency-plugin:3.2.0:unpack -Dproject.basedir=$BAHMNI_DIR -Dartifact=net.mekomsolutions:bahmni-distro-$DISTRO_GROUP:$DISTRO_VERSION:zip -DoutputDirectory=$BAHMNI_DIR/bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION
+git clone git@github.com:mekomsolutions/bahmni-docker-compose.git
 ```
 
+Copy the bahmni distro target folder Eg. `/target/bahmni-distro-c2c-2.1.0-SNAPSHOT` to `bahmni-docker-compose` project Eg. `bahmni-docker-compose/c2c/bahmni-distro-c2c-2.1.0-SNAPSHOT`
 
-The Bahmni Docker project relies on environment variable to document where the Distro is to be found.
-As an example, you can export the following variables:
 ```
-export DISTRO_PATH=$BAHMNI_DIR/bahmni-distro-$DISTRO_GROUP-$DISTRO_VERSION && \
-export OPENMRS_CONFIG_PATH=$DISTRO_PATH/openmrs_config && \
-export BAHMNI_CONFIG_PATH=$DISTRO_PATH/bahmni_config && \
-export OPENMRS_MODULES_PATH=$DISTRO_PATH/openmrs_modules && \
-export BAHMNI_APPS_PATH=$DISTRO_PATH/bahmni_emr/bahmniapps && \
-export ODOO_CONFIG_PATH=$DISTRO_PATH/odoo_config && \
-export ODOO_EXTRA_ADDONS=$DISTRO_PATH/odoo_addons && \
-export EIP_CLIENT_ROUTES_PATH=$DISTRO_PATH/eip_config/routes && \
-export EIP_CONFIG_PATH=$DISTRO_PATH/eip_config
+cp -r <path_to_project_bahmni-distro-c2c>/target/bahmni-distro-c2c-2.1.0-SNAPSHOT <path_to_project_bahmni-docker-compose>/c2c
 ```
 
+Export the following env variables
+
+```
+export OPENMRS_CONFIG_PATH=<path_to_project>/bahmni-docker-compose/c2c/bahmni-distro-c2c-2.1.0-SNAPSHOT/openmrs_config && \
+export BAHMNI_CONFIG_PATH=<path_to_project>/bahmni-docker-compose/c2c/bahmni-distro-c2c-2.1.0-SNAPSHOT/bahmni_config && \
+export OPENMRS_MODULES_PATH=<path_to_project>/bahmni-docker-compose/c2c/bahmni-distro-c2c-2.1.0-SNAPSHOT/openmrs_modules && \
+export BAHMNI_APPS_PATH=<path_to_project>/bahmni-docker-compose/c2c/bahmni-distro-c2c-2.1.0-SNAPSHOT/bahmni_emr/bahmniapps && \
+export ODOO_CONFIG_PATH=<path_to_project>/bahmni-docker-compose/c2c/bahmni-distro-c2c-2.1.0-SNAPSHOT/odoo_config && \
+export ODOO_EXTRA_ADDONS=<path_to_project>/bahmni-docker-compose/c2c/bahmni-distro-c2c-2.1.0-SNAPSHOT/odoo_addons && \
+export EIP_CLIENT_ROUTES_PATH=<path_to_project>/bahmni-docker-compose/c2c/bahmni-distro-c2c-2.1.0-SNAPSHOT/eip_config/routes && \
+export EIP_CONFIG_PATH=<path_to_project>/bahmni-docker-compose/c2c/bahmni-distro-c2c-2.1.0-SNAPSHOT/eip_config
+```
 The complete list of available variables can be found in [.env](.env).
 
-### Start Bahmni:
+Run
+```
+docker-compose up
+```
 
-```
-cd $BAHMNI_DIR/bahmni-docker-compose-$VERSION && \
-docker-compose -p $DISTRO_GROUP up
-```
 <p align="center">
 <img src="./readme/docker-compose-up-shadow.png" alt="docker-compose up" height="200">
 </p>
