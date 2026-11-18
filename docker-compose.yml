@@ -289,6 +289,7 @@ services:
       MB_DB_HOST: postgresql
       MB_ADMIN_EMAIL: ${METABASE_USER}
       MB_ADMIN_PASSWORD: ${METABASE_PASSWORD}
+      JAVA_TOOL_OPTIONS: ${JAVA_TOOL_OPTIONS:--XX:-UseBASE64Intrinsics}
     networks:
       bahmni:
         aliases:
@@ -376,6 +377,8 @@ services:
       - "${EIP_HOME_PATH:-eip-home}:/eip-home"
     environment:
       - JAVA_OPTS=${EIP_JAVA_OPTS}
+      # CVE-2026-114938. start.sh does not pass JAVA_OPTS to java; the JVM reads this itself.
+      - JAVA_TOOL_OPTIONS=${JAVA_TOOL_OPTIONS:--XX:-UseBASE64Intrinsics}
       - MYSQL_DATABASE=openmrs
       - MYSQL_USER=${OPENMRS_DB_USER}
       - MYSQL_PASSWORD=${OPENMRS_DB_PASSWORD}
