@@ -165,7 +165,10 @@ services:
       - "${BAHMNI_HOME_PATH:-bahmni-home}:/home/bahmni/"
       - "${BAHMNI_OBSCALCULATOR_PATH:-bahmni-obscalculator}:/usr/local/tomcat/.OpenMRS/obscalculator/"
       - ./properties/openmrs/:/etc/properties/
+      - ./monitoring/:/monitoring/
       - "${BAHMNI_IMAGE_PATH:-bahmni-images}:/home/bahmni/patient_images"
+    ports:
+      - "${JMX_EXPORTER_PORT:-8088}:8088"
 
   # MySQL
   mysql:
