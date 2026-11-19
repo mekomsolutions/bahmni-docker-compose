@@ -1,7 +1,7 @@
 version: '3'
 services:
   upload-backup:
-    image: mekomsolutions/s3_sync:latest
+    image: mekomsolutions/s3_sync:a087235
     environment:
     - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
     - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
